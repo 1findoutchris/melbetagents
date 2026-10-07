@@ -1,15 +1,14 @@
 import type { Dictionary } from "@/i18n";
+import { DisplayTitle } from "./Brand";
 import { IconArrowRight } from "./Icons";
 
 export function About({ t }: { t: Dictionary["about"] }) {
   return (
     <section id="about" className="section section--alt" aria-labelledby="about-title">
       <div className="container about">
-        <div className="about__intro" data-reveal>
+        <div data-reveal>
           <p className="eyebrow">{t.eyebrow}</p>
-          <h2 id="about-title" className="section-title">
-            {t.title}
-          </h2>
+          <DisplayTitle id="about-title" lines={t.titleLines} accent={t.titleAccent} />
           <p className="section-lead">{t.lead}</p>
           <a href="#apply" className="btn btn--primary about__cta">
             {t.cta}

@@ -97,6 +97,20 @@ export const siteConfig = {
     helpName: "Gambling Therapy",
   },
 
+  /**
+   * Partner / sponsor logo strip (e.g. Juventus, LaLiga). DISABLED until both
+   * the authentic logo files and the exact relationship wording are confirmed.
+   * To enable: put the files in public/partners/, list them below with their
+   * real pixel dimensions, set an accurate `label`, and set `enabled: true`.
+   * The strip will not render unless all three are present.
+   */
+  partners: {
+    enabled: false,
+    /** e.g. "Official partner of" — only if that relationship is confirmed for this website. */
+    label: null as string | null,
+    logos: [] as { name: string; src: string; width: number; height: number }[],
+  },
+
   legal: {
     /** Shown on the Privacy Policy and Terms pages. */
     lastUpdated: "2026-10-07",

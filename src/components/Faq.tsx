@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import type { Dictionary } from "@/i18n";
 import { fmt } from "@/i18n";
+import { DisplayTitle } from "./Brand";
 
 /** Accordion following the WAI-ARIA pattern: heading > button[aria-expanded] controlling a region. */
 export function Faq({ t, age }: { t: Dictionary["faq"]; age: number }) {
@@ -14,9 +15,7 @@ export function Faq({ t, age }: { t: Dictionary["faq"]; age: number }) {
       <div className="container">
         <div className="section-head section-head--center" data-reveal>
           <p className="eyebrow">{t.eyebrow}</p>
-          <h2 id="faq-title" className="section-title">
-            {t.title}
-          </h2>
+          <DisplayTitle id="faq-title" lines={t.titleLines} accent={t.titleAccent} />
         </div>
         <div className="faq">
           {t.items.map((item, i) => {

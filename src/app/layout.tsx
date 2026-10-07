@@ -1,11 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Sora } from "next/font/google";
+import { Barlow_Condensed, Inter } from "next/font/google";
 import { siteConfig, siteUrl } from "@/config/site";
 import { defaultLocale, getDictionary, localeMeta } from "@/i18n";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const sora = Sora({ subsets: ["latin"], variable: "--font-sora", display: "swap", weight: ["600", "700", "800"] });
+const barlow = Barlow_Condensed({
+  subsets: ["latin"],
+  variable: "--font-barlow",
+  display: "swap",
+  weight: ["600", "700", "800"],
+});
 
 const t = getDictionary(defaultLocale);
 const meta = localeMeta[defaultLocale];
@@ -34,7 +39,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0c",
+  themeColor: "#08090b",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
@@ -43,7 +48,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={meta.lang} dir={meta.dir} className={`${inter.variable} ${sora.variable}`} suppressHydrationWarning>
+    <html lang={meta.lang} dir={meta.dir} className={`${inter.variable} ${barlow.variable}`} suppressHydrationWarning>
       <head>
         {/* Enables JS-only enhancements (scroll reveal) without hiding content when JS is unavailable. */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />

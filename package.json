@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "db:migrate": "node scripts/migrate.mjs",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "assets": "python3 scripts/build_assets.py"
   },
   "engines": {
     "node": ">=20.9"

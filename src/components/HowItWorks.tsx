@@ -1,14 +1,13 @@
 import type { Dictionary } from "@/i18n";
+import { DisplayTitle } from "./Brand";
 
 export function HowItWorks({ t }: { t: Dictionary["howItWorks"] }) {
   return (
-    <section id="how-it-works" className="section" aria-labelledby="how-title">
+    <section id="how-it-works" className="section section--alt" aria-labelledby="how-title">
       <div className="container">
         <div className="section-head" data-reveal>
           <p className="eyebrow">{t.eyebrow}</p>
-          <h2 id="how-title" className="section-title">
-            {t.title}
-          </h2>
+          <DisplayTitle id="how-title" lines={t.titleLines} accent={t.titleAccent} />
           <p className="section-lead">{t.lead}</p>
         </div>
         <ol className="steps">
@@ -17,10 +16,8 @@ export function HowItWorks({ t }: { t: Dictionary["howItWorks"] }) {
               <span className="step__num" aria-hidden="true">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <div className="step__content">
-                <h3 className="step__title">{step.title}</h3>
-                <p className="step__body">{step.body}</p>
-              </div>
+              <h3 className="step__title">{step.title}</h3>
+              <p className="step__body">{step.body}</p>
             </li>
           ))}
         </ol>

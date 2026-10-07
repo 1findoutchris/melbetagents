@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Dictionary } from "@/i18n";
 import { IconArrowRight } from "./Icons";
-import { Wordmark } from "./Wordmark";
+import { Logo } from "./Brand";
 
 type Props = {
   nav: Dictionary["nav"];
@@ -21,7 +21,6 @@ export function Header({ nav, a11y, base = "" }: Props) {
   const links = [
     { href: `${base}#about`, label: nav.about },
     { href: `${base}#benefits`, label: nav.benefits },
-    { href: `${base}#agent-types`, label: nav.agentTypes },
     { href: `${base}#how-it-works`, label: nav.howItWorks },
     { href: `${base}#faq`, label: nav.faq },
   ];
@@ -66,7 +65,7 @@ export function Header({ nav, a11y, base = "" }: Props) {
       }
     };
     const onResize = () => {
-      if (window.matchMedia("(min-width: 1081px)").matches) close(false);
+      if (window.matchMedia("(min-width: 961px)").matches) close(false);
     };
     document.addEventListener("keydown", onKey);
     window.addEventListener("resize", onResize);
@@ -81,7 +80,7 @@ export function Header({ nav, a11y, base = "" }: Props) {
     <>
       <header className="site-header" data-scrolled={scrolled || open}>
         <div className="container site-header__inner">
-          <Wordmark label={a11y.home} />
+          <Logo label={a11y.home} />
 
           <nav className="nav" aria-label={a11y.mainNav}>
             {links.map((link) => (

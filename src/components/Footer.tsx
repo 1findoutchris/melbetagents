@@ -1,7 +1,7 @@
 import { siteConfig } from "@/config/site";
 import { fmt, type Dictionary } from "@/i18n";
+import { Logo } from "./Brand";
 import { ContactList } from "./ContactList";
-import { Wordmark } from "./Wordmark";
 
 export function Footer({
   t,
@@ -20,24 +20,42 @@ export function Footer({
       <div className="container">
         <div className="footer-grid">
           <div className="footer-brand">
-            <Wordmark label={a11y.home} />
+            <Logo label={a11y.home} />
             <p>{t.tagline}</p>
-          </div>
-
-          <div>
-            <h2 className="footer-title">{t.contactTitle}</h2>
-            <ContactList t={t} />
           </div>
 
           <nav aria-label={a11y.footerNav}>
             <h2 className="footer-title">{t.linksTitle}</h2>
             <ul className="footer-list">
               <li>
-                <a href="/#apply">{nav.apply}</a>
+                <a href="/#about">{nav.about}</a>
+              </li>
+              <li>
+                <a href="/#benefits">{nav.benefits}</a>
+              </li>
+              <li>
+                <a href="/#agent-types">{nav.agentTypes}</a>
+              </li>
+              <li>
+                <a href="/#how-it-works">{nav.howItWorks}</a>
               </li>
               <li>
                 <a href="/#faq">{nav.faq}</a>
               </li>
+              <li>
+                <a href="/#apply">{nav.apply}</a>
+              </li>
+            </ul>
+          </nav>
+
+          <div>
+            <h2 className="footer-title">{t.contactTitle}</h2>
+            <ContactList t={t} />
+          </div>
+
+          <div>
+            <h2 className="footer-title">{t.legalTitle}</h2>
+            <ul className="footer-list">
               <li>
                 <a href="/privacy">{t.privacy}</a>
               </li>
@@ -45,7 +63,7 @@ export function Footer({
                 <a href="/terms">{t.terms}</a>
               </li>
             </ul>
-          </nav>
+          </div>
         </div>
 
         <div className="footer-notices">
