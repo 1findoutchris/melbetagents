@@ -5,6 +5,7 @@
  */
 import { siteConfig, visibleAgentTypes, type AgentTypeId } from "@/config/site";
 import { isCountryCode } from "@/lib/countries";
+import type { PhoneLib } from "@/lib/phone";
 
 export type PreferredAgentType = AgentTypeId | "unsure";
 
@@ -12,8 +13,11 @@ export type ApplicationInput = {
   fullName: string;
   country: string;
   city: string;
+  /** ISO country whose calling code the phone number uses, e.g. "KE". */
+  phoneCountry: string;
   phone: string;
   telegram: string;
+  whatsappCountry: string;
   whatsapp: string;
   agentType: string;
   capitalAmount: string;
@@ -31,6 +35,8 @@ export type ValidationErrorCode =
   | "tooShort"
   | "tooLong"
   | "invalidPhone"
+  | "selectCode"
+  | "phoneCodeMismatch"
   | "invalidTelegram"
   | "invalidChoice"
   | "invalidAmount"
@@ -44,9 +50,12 @@ export type CleanApplication = {
   fullName: string;
   country: string;
   city: string;
+  /** E.164, e.g. +254712345678 */
   phone: string;
+  phoneCountry: string;
   telegram: string;
   whatsapp: string | null;
+  whatsappCountry: string | null;
   agentType: PreferredAgentType;
   capitalAmount: number | null;
   capitalCurrency: string | null;
@@ -66,8 +75,10 @@ export const FIELD_ORDER: ApplicationField[] = [
   "fullName",
   "country",
   "city",
+  "phoneCountry",
   "phone",
   "telegram",
+  "whatsappCountry",
   "whatsapp",
   "agentType",
   "capitalAmount",
@@ -82,8 +93,10 @@ export const emptyApplication: ApplicationInput = {
   fullName: "",
   country: siteConfig.availability.defaultCountry ?? "",
   city: "",
+  phoneCountry: "",
   phone: "",
   telegram: "",
+  whatsappCountry: "",
   whatsapp: "",
   agentType: "",
   capitalAmount: "",
@@ -104,11 +117,19 @@ const multiline = (value: unknown): string =>
         .trim()
     : "";
 
-/** Converts "+251 91-234 5678" to "+251912345678"; returns null when not E.164-like. */
-export function normalizePhone(value: string): string | null {
-  const compact = value.replace(/[\s\-().]/g, "");
-  const withPlus = compact.startsWith("00") ? `+${compact.slice(2)}` : compact;
-  return /^\+[1-9]\d{7,14}$/.test(withPlus) ? withPlus : null;
+type PhoneCheck = { ok: true; e164: string } | { ok: false; field: "country" | "number"; code: ValidationErrorCode };
+
+/**
+ * Validates a number against the selected country's numbering plan. Accepts
+ * national format ("0712 345678") or international format ("+254 712 345678").
+ */
+export function checkPhone(number: string, country: string, lib: PhoneLib): PhoneCheck {
+  if (!country || !lib.isSupportedCountry(country)) return { ok: false, field: "country", code: "selectCode" };
+  const parsed = lib.parsePhoneNumberFromString(number, country as never);
+  if (!parsed || !parsed.isValid()) return { ok: false, field: "number", code: "invalidPhone" };
+  if (parsed.countryCallingCode !== lib.getCountryCallingCode(country as never))
+    return { ok: false, field: "number", code: "phoneCodeMismatch" };
+  return { ok: true, e164: parsed.number };
 }
 
 /** Telegram usernames: 5–32 characters, letters, digits and underscores, starting with a letter. */
@@ -126,6 +147,7 @@ export function allowedAgentTypes(): PreferredAgentType[] {
 
 export function validateApplication(
   raw: Partial<Record<ApplicationField, unknown>>,
+  lib: PhoneLib,
 ): { ok: true; value: CleanApplication } | { ok: false; errors: FieldErrors } {
   const errors: FieldErrors = {};
 
@@ -145,19 +167,32 @@ export function validateApplication(
   else if (city.length < LIMITS.city.min) errors.city = "tooShort";
   else if (city.length > LIMITS.city.max) errors.city = "tooLong";
 
+  const phoneCountry = collapse(raw.phoneCountry).toUpperCase();
   const phoneRaw = collapse(raw.phone);
-  const phone = phoneRaw ? normalizePhone(phoneRaw) : null;
+  let phone: string | null = null;
+  if (!phoneCountry) errors.phoneCountry = "selectCode";
   if (!phoneRaw) errors.phone = "required";
-  else if (!phone) errors.phone = "invalidPhone";
+  if (phoneCountry && phoneRaw) {
+    const check = checkPhone(phoneRaw, phoneCountry, lib);
+    if (check.ok) phone = check.e164;
+    else if (check.field === "country") errors.phoneCountry = check.code;
+    else errors.phone = check.code;
+  }
 
   const telegramRaw = collapse(raw.telegram);
   const telegram = telegramRaw ? normalizeTelegram(telegramRaw) : null;
   if (!telegramRaw) errors.telegram = "required";
   else if (!telegram) errors.telegram = "invalidTelegram";
 
+  const whatsappCountry = collapse(raw.whatsappCountry).toUpperCase();
   const whatsappRaw = collapse(raw.whatsapp);
-  const whatsapp = whatsappRaw ? normalizePhone(whatsappRaw) : null;
-  if (whatsappRaw && !whatsapp) errors.whatsapp = "invalidPhone";
+  let whatsapp: string | null = null;
+  if (whatsappRaw) {
+    const check = checkPhone(whatsappRaw, whatsappCountry, lib);
+    if (check.ok) whatsapp = check.e164;
+    else if (check.field === "country") errors.whatsappCountry = check.code;
+    else errors.whatsapp = check.code;
+  }
 
   const agentType = collapse(raw.agentType) as PreferredAgentType;
   if (!agentType) errors.agentType = "required";
@@ -199,8 +234,10 @@ export function validateApplication(
       country,
       city,
       phone: phone!,
+      phoneCountry,
       telegram: telegram!,
       whatsapp,
+      whatsappCountry: whatsapp ? whatsappCountry : null,
       agentType,
       capitalAmount,
       capitalCurrency,

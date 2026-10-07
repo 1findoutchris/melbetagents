@@ -1,9 +1,11 @@
 import type { Dictionary } from "@/i18n";
 import { DisplayTitle, Football, Honeycomb } from "./Brand";
+import { siteConfig } from "@/config/site";
 import { IconInfo } from "./Icons";
+import { PartnerLogos } from "./LogoStrip";
 
 /** Image-led platform section. Images are original renders from scripts/render_scenes.py. */
-export function SportsShowcase({ t }: { t: Dictionary["sports"] }) {
+export function SportsShowcase({ t, partners }: { t: Dictionary["sports"]; partners: Dictionary["partners"] }) {
   const [main, side, brand] = t.panels;
   return (
     <section id="sports" className="section" aria-labelledby="sports-title">
@@ -25,6 +27,11 @@ export function SportsShowcase({ t }: { t: Dictionary["sports"] }) {
               loading="lazy"
               decoding="async"
             />
+            {siteConfig.partners.enabled && siteConfig.partners.logos.length > 0 && (
+              <div className="panel__logos">
+                <PartnerLogos t={partners} size="sm" />
+              </div>
+            )}
             <div className="panel__body">
               <span className="panel__tag">{main.tag}</span>
               <h3 className="panel__title">{main.title}</h3>

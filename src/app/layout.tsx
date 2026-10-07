@@ -15,15 +15,15 @@ const barlow = Barlow_Condensed({
 const t = getDictionary(defaultLocale);
 const meta = localeMeta[defaultLocale];
 
+const indexable = process.env.SITE_NOINDEX !== "true";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: { default: t.meta.title, template: `%s | ${siteConfig.name}` },
   description: t.meta.description,
   applicationName: siteConfig.name,
-  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    url: "/",
     siteName: siteConfig.name,
     title: t.meta.title,
     description: t.meta.description,
@@ -34,7 +34,10 @@ export const metadata: Metadata = {
     title: t.meta.title,
     description: t.meta.description,
   },
-  robots: { index: true, follow: true },
+  // Set SITE_NOINDEX=true on staging/preview deployments to keep them out of search results.
+  robots: indexable ? { index: true, follow: true } : { index: false, follow: false },
+  // Google Search Console HTML-tag verification (optional; DNS verification needs no code).
+  ...(process.env.GOOGLE_SITE_VERIFICATION ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } } : {}),
   formatDetection: { telephone: false },
 };
 

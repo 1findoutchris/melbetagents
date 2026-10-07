@@ -1,5 +1,6 @@
 import { siteConfig, visibleAgentTypes } from "@/config/site";
 import { countryOptions } from "@/lib/countries";
+import { callingCodeOptions } from "@/lib/phone-server";
 import { fmt, type Dictionary, type Locale } from "@/i18n";
 import { ApplicationForm } from "./ApplicationForm";
 import { DisplayTitle, Football } from "./Brand";
@@ -43,6 +44,7 @@ export function ApplicationSection({ t, locale }: { t: Dictionary; locale: Local
         <div className="form-card">
           <ApplicationForm
             t={t.form}
+            callingCodes={callingCodeOptions(locale)}
             agentTypeLabels={agentTypeLabels}
             countries={countryOptions(locale, siteConfig.availability.countries)}
             currencies={siteConfig.currencies}

@@ -107,13 +107,44 @@ All images are produced by `npm run assets` (`scripts/build_assets.py`, which ne
 
 No third-party photography is used. To swap in licensed photography later, replace the files in `public/images/` and keep the same names, or update `src/components/Brand.tsx` and `src/components/SportsShowcase.tsx`.
 
-### Partner logo strip
+### Club and league logos
 
-`src/components/LogoStrip.tsx` displays partner logos, such as Juventus and LaLiga, in a centred strip. Each logo keeps its proportions and is sized to look visually balanced with the others. The strip only appears when **all** of these are true:
+The supplied Juventus and LaLiga logos are kept as sources in `assets/partners/`. The site serves white, single-colour versions with transparent backgrounds from `public/partners/`. The shapes are unchanged: they are trimmed only to their outer edges and never stretched. They appear in two places: small in the sports section's main panel, and larger in the strip above the final call to action. Both sizes keep each logo's proportions and give them a similar visual weight.
 
-- `siteConfig.partners.enabled` is `true`.
-- `siteConfig.partners.label` holds the confirmed relationship wording, for example "Official partner of".
-- `siteConfig.partners.logos` lists authentic files placed in `public/partners/`, each with its real pixel width and height.
+They are configured in `siteConfig.partners`. While `relationshipConfirmed` is `false`, the strip uses the neutral heading "The football your players follow" and a trademark notice saying the clubs do not partner with or endorse this site. Set `confirmedLabel` and `relationshipConfirmed: true` only when a relationship is confirmed in writing. Set `enabled: false` to remove both placements.
+
+## International phone fields
+
+The phone and WhatsApp fields each have a country-code selector, covering every country in `libphonenumber-js`, and a number field.
+
+- **Before a code is chosen**, the selector shows "Select country code" and the number field shows "Enter phone number".
+- **After a code is chosen**, the number field shows a real example for that country, and the number is validated against that country's numbering plan.
+- **Validation:** the browser uses the compact metadata for instant feedback, and the server re-checks with the full metadata.
+- **Storage:** numbers are stored in international format (E.164). The selected countries are stored in `phone_country` and `whatsapp_country`; run `npm run db:migrate` after upgrading.
+- **No default country:** none is preselected. When an applicant picks their country of residence, any empty code fields are filled with that country's code, and they can change it.
+
+## Search engines
+
+What is in place:
+
+- **Metadata:** each public page has a unique title, description and canonical URL on `SITE_URL`, plus Open Graph and Twitter tags.
+- **Headings:** the home page has a single H1, "Become a Melbet Payment Agent".
+- **Structured data:**
+  - `WebSite` structured data is published, along with `FAQPage` data that mirrors the visible FAQ.
+  - `Organization` data is published only after you set `siteConfig.operator.confirmed: true` with the real operator name.
+  - The guide page publishes `Article` and `BreadcrumbList` data.
+- **Crawling:** `sitemap.xml` lists the home page, the guide and the legal pages. `robots.txt` allows everything except `/api/`, and `/api/*` responses also send `X-Robots-Tag: noindex`. Applicant data is never rendered on any page.
+- **Redirects:** `www.` (or the hosts in `ALTERNATE_HOSTS`) redirects to the canonical domain. Requests that arrive as `http` behind a proxy redirect to `https`. Most hosts, including Vercel, also enforce HTTPS themselves.
+- **Guide page:** `/guides/melbet-1xbet-payment-agents` is a neutral guide for people comparing payment agent opportunities. It states that this site recruits Melbet agents only and makes no claims about 1xBet's terms.
+
+### Verify with Google Search Console and submit the sitemap
+
+1. Open [Google Search Console](https://search.google.com/search-console) and choose **Add property**.
+2. Choose **Domain**, enter `melbetagents.org`, copy the TXT record Google shows, and add it in your DNS provider. This verifies every variant at once (www and non-www, http and https). Wait for DNS to update, then click **Verify**. _Alternatively_ use a **URL prefix** property (`https://melbetagents.org/`) with the **HTML tag** method: put the `content` value in `GOOGLE_SITE_VERIFICATION`, redeploy, then click **Verify**.
+3. In **Sitemaps**, submit `https://melbetagents.org/sitemap.xml`.
+4. Use **URL Inspection** on the home page and request indexing if you want it crawled sooner.
+
+Indexing and rankings are decided by Google. Crawling can take days to weeks, and no particular position can be guaranteed.
 
 ## Adding Amharic (or another language)
 
@@ -167,4 +198,5 @@ Every item below is marked `REVIEW BEFORE LAUNCH` in the code. Nothing on the si
 9. **Legal review:** the Privacy Policy and Terms are templates. Review them, especially the legal basis, data sharing, retention (24 months by default) and contact details. Then remove the yellow review notice in `src/components/LegalPage.tsx`.
 10. **Legality by market:** gambling and payment-agent activity is regulated differently in each country. Confirm where you can lawfully recruit, and restrict the country list to match.
 11. **Responsible-gambling resource:** this defaults to Gambling Therapy (international). Replace it with a local service if appropriate.
-12. **Partner logos (Juventus, LaLiga):** the logo strip is built but disabled. To turn it on, supply the authentic logo files and the confirmed relationship wording, then set `siteConfig.partners`.
+12. **Club and league logos (Juventus, LaLiga):** these are shown with a neutral heading and a trademark notice. Confirm you are permitted to display them, and set `siteConfig.partners.relationshipConfirmed` only if a written relationship exists.
+13. **Operator confirmation:** set `siteConfig.operator.confirmed: true` once `legalName` is real, so `Organization` structured data is published.

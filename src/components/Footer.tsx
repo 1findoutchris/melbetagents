@@ -45,6 +45,9 @@ export function Footer({
               <li>
                 <a href="/#apply">{nav.apply}</a>
               </li>
+              <li>
+                <a href="/guides/melbet-1xbet-payment-agents">{t.guides}</a>
+              </li>
             </ul>
           </nav>
 
