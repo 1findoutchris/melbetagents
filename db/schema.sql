@@ -34,6 +34,24 @@ CREATE TABLE IF NOT EXISTS agent_applications (
 ALTER TABLE agent_applications ADD COLUMN IF NOT EXISTS phone_country char(2);
 ALTER TABLE agent_applications ADD COLUMN IF NOT EXISTS whatsapp_country char(2);
 
+-- Telegram notification tracking. Applicant data is never written to these columns.
+--   notify_status: not_configured | pending | sending | sent | failed
+ALTER TABLE agent_applications ADD COLUMN IF NOT EXISTS notify_status text NOT NULL DEFAULT 'pending';
+ALTER TABLE agent_applications ADD COLUMN IF NOT EXISTS notify_attempts integer NOT NULL DEFAULT 0;
+ALTER TABLE agent_applications ADD COLUMN IF NOT EXISTS notify_next_attempt_at timestamptz;
+ALTER TABLE agent_applications ADD COLUMN IF NOT EXISTS notify_claimed_at timestamptz;
+ALTER TABLE agent_applications ADD COLUMN IF NOT EXISTS notify_last_error text;
+ALTER TABLE agent_applications ADD COLUMN IF NOT EXISTS telegram_message_id bigint;
+-- Rows created before tracking existed: mark as already handled so they are never re-sent.
+UPDATE agent_applications SET notify_status = 'sent' WHERE notified_at IS NOT NULL AND notify_status = 'pending';
+-- Older rows that were never attempted are not sent retroactively.
+UPDATE agent_applications SET notify_status = 'not_configured'
+  WHERE notified_at IS NULL AND notify_status = 'pending' AND notify_attempts = 0
+    AND notify_next_attempt_at IS NULL AND created_at < now() - interval '1 hour';
+
+CREATE INDEX IF NOT EXISTS agent_applications_notify_due_idx
+  ON agent_applications (notify_next_attempt_at) WHERE notify_status IN ('pending', 'sending');
+
 CREATE INDEX IF NOT EXISTS agent_applications_created_at_idx ON agent_applications (created_at DESC);
 CREATE INDEX IF NOT EXISTS agent_applications_ip_hash_idx ON agent_applications (ip_hash, created_at DESC);
 CREATE INDEX IF NOT EXISTS agent_applications_phone_idx ON agent_applications (phone, created_at DESC);

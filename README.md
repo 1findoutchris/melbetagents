@@ -35,18 +35,64 @@ All of these are read **only on the server**. None use the `NEXT_PUBLIC_` prefix
 | `DATABASE_URL`                                 | **Yes**               | PostgreSQL connection string. Without it the form shows "Applications cannot be received right now" and nothing is saved. The form never fakes a success.                    |
 | `DATABASE_SSL`                                 | Hosted DBs            | `require` turns on TLS with certificate verification. `no-verify` turns on TLS without verification, for self-signed certificates only. Leave it empty for a local database. |
 | `IP_HASH_SALT`                                 | **Yes in production** | Random secret used to hash applicant IP addresses for rate limiting. Raw IP addresses are never stored.                                                                      |
-| `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`      | Optional              | When both are set, each new application is sent to that chat from the server, after the application is saved.                                                                |
+| `TELEGRAM_BOT_TOKEN`                           | For notifications     | Token of @melbetagentsorgbot. **Secret**: store it only in your host's environment settings.                                                                                 |
+| `TELEGRAM_GROUP_CHAT_ID`                       | For notifications     | ID of the staff group that receives notifications (a negative number). It is fixed on the server, so applicants cannot change it.                                            |
+| `TELEGRAM_TIMEZONE`                            | Optional              | Time zone for the "Submitted" line, e.g. `Africa/Addis_Ababa`. Default: `UTC`.                                                                                               |
+| `CRON_SECRET`                                  | Recommended           | Random secret that protects the notification retry endpoint (`/api/notifications/retry`).                                                                                    |
 | `SITE_URL`                                     | Optional              | Canonical URL for metadata and the sitemap. Defaults to `https://melbetagents.org`.                                                                                          |
 | `RATE_LIMIT_MAX` / `RATE_LIMIT_WINDOW_MINUTES` | Optional              | Applications allowed per IP per window. The default is 5 per 60 minutes.                                                                                                     |
 
 ### Telegram notifications
 
-1. Create a bot with [@BotFather](https://t.me/BotFather) and copy the token.
-2. Add the bot to your private staff group and send any message in that group.
-3. Open `https://api.telegram.org/bot<TOKEN>/getUpdates` and copy `chat.id`. Group IDs are negative numbers.
-4. Set `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` on the server.
+Each saved application is posted to your staff Telegram group by @melbetagentsorgbot, from the server only:
 
-The notification is sent after the response, using Next.js `after()`. If it fails, the error is logged and the applicant is not affected. Successful sends set `notified_at` on the row.
+```
+📩 NEW MELBET AGENT APPLICATION
+
+Application ID: MA-1A2B3C4D
+Full name: …
+Country: Kenya (KE)
+City: …
+Phone: +254712345678
+Telegram: @username
+WhatsApp: Not provided
+Agent type: Cash agent
+Starting capital: 1,500.50 USD
+Previous experience: Not provided
+Additional message: Not provided
+Submitted: 7 Oct 2026, 14:24 GMT+3
+```
+
+**How it works**
+
+- **Sending:**
+  - The message is sent only after the application is validated and saved, and after the applicant's response has already gone out. A Telegram problem never affects the applicant or the saved application.
+  - It is plain text with no formatting mode, so nothing an applicant types can change how it renders. Form limits keep it under Telegram's 4,096-character limit, and it is trimmed if it ever exceeds that.
+- **Tracking:** each application row records its notification status: `notify_status` (`pending`, `sending`, `sent`, `failed` or `not_configured`), `notify_attempts`, `notify_last_error`, `telegram_message_id` and `notified_at`.
+- **Retries:**
+  - _Rate limits (429):_ Telegram's `retry_after` is respected. Short waits are handled immediately; longer ones are scheduled.
+  - _Network errors and Telegram server errors:_ retried after 30 s, 2 min, 10 min and 30 min, with at most 5 attempts in total.
+  - _Permanent errors:_ a wrong chat ID (400), a bad token (401) or the bot being removed from the group (403) stop immediately with `failed`.
+  - _Duplicates:_ each row is claimed atomically before sending, so duplicate messages are avoided.
+- **When retries run:** after each new submission, and whenever `/api/notifications/retry` is called with `Authorization: Bearer <CRON_SECRET>`. Point a scheduler (Vercel Cron, cron-job.org or similar) at it every 10 minutes so retries continue during quiet periods.
+- **Privacy:** logs contain only the application reference, the attempt number and Telegram's error text. The token is never logged; it is redacted from any error output.
+- **When Telegram is not configured:** applications are still saved, with `notify_status = 'not_configured'`. They are not sent later.
+
+**Setup**
+
+1. **Add the bot to the group.** In Telegram, open your staff group, then _Add members_ → search `@melbetagentsorgbot` → add.
+2. **Permissions.** In a normal group, members can send messages by default, so the bot needs no admin rights. Make it an administrator _only_ if the group restricts who can post (_Group settings → Permissions_), and then grant just _Send messages_.
+3. **Find the group chat ID.** Send `/start@melbetagentsorgbot` in the group first.
+   - _Recommended:_ on your own computer, put the token in `.env.local` (never committed) and run `npm run telegram:setup`. It shows the bot, any webhook, and the groups it has seen, without printing the token. Group IDs are negative (supergroups start with `-100`).
+   - _If a webhook is configured:_ `getUpdates` cannot be used. Read the chat ID from the system that receives the webhook, or temporarily remove the webhook, find the ID, and restore it afterwards. The script tells you if a webhook is set.
+   - _If the group is later upgraded to a supergroup:_ its ID changes. The notification error will name the new ID to put in `TELEGRAM_GROUP_CHAT_ID`.
+4. **Add the variables in your host.** Add `TELEGRAM_BOT_TOKEN`, `TELEGRAM_GROUP_CHAT_ID`, optionally `TELEGRAM_TIMEZONE`, and `CRON_SECRET` as **server** environment variables in your hosting provider. On Vercel that's _Project → Settings → Environment Variables_, marked for _Production_. Never use a `NEXT_PUBLIC_` prefix, and never commit them.
+5. **Redeploy and test.**
+   - Run `npm run db:migrate` against the production database, then redeploy.
+   - Optional: `npm run telegram:test` sends a data-free test message to the group.
+   - Submit an application with obviously fake details. Check that it appears in `agent_applications` with `notify_status = 'sent'` and that the message reaches the group.
+
+`TELEGRAM_API_BASE` exists only to point the code at a local mock Telegram server during automated testing. Leave it unset in production.
 
 ## Reviewing applications
 
