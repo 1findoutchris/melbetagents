@@ -2448,16 +2448,6 @@ fieldset.form-section legend + * {
   font-size: 0.875rem;
 }
 
-.legal__review {
-  margin-top: 24px;
-  padding: 14px 16px;
-  border: 1px solid var(--yellow-line);
-  border-radius: 10px;
-  background: var(--yellow-soft);
-  color: #d4d6db;
-  font-size: 0.875rem;
-}
-
 .legal section {
   margin-top: 40px;
 }

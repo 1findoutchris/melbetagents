@@ -46,8 +46,6 @@ export function LegalPage({ doc, locale }: { doc: LegalDoc; locale: Locale }) {
           <p className="legal__meta">
             {t.legal.lastUpdated}: <time dateTime={siteConfig.legal.lastUpdated}>{date}</time>
           </p>
-          {/* REVIEW BEFORE LAUNCH: remove this notice once the document has been reviewed. */}
-          <p className="legal__review">{t.legal.reviewNotice}</p>
           <p style={{ marginTop: 24 }}>{fmt(doc.intro, values)}</p>
           {doc.sections.map((section) => (
             <section key={section.h}>

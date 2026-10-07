@@ -239,7 +239,7 @@ Every item below is marked `REVIEW BEFORE LAUNCH` in the code. Nothing on the si
 6. **Commission terms:** the site only says commission is set out in the agent agreement. Set `commission.publicSummary` only once the terms are publishable. When set, it appears on the commission benefit card.
 7. **Countries and payment methods:** confirm whether to restrict the country list. The FAQ says availability is confirmed per applicant.
 8. **Currencies** offered next to "estimated starting capital".
-9. **Legal review:** the Privacy Policy and Terms are templates. Review them, especially the legal basis, data sharing, retention (24 months by default) and contact details. Then remove the yellow review notice in `src/components/LegalPage.tsx`.
+9. **Legal review:** the Privacy Policy and Terms are templates. Review them, especially the legal basis, data sharing, retention (24 months by default) and contact details.
 10. **Legality by market:** gambling and payment-agent activity is regulated differently in each country. Confirm where you can lawfully recruit, and restrict the country list to match.
 11. **Responsible-gambling resource:** this defaults to Gambling Therapy (international). Replace it with a local service if appropriate.
 12. **Logos:** confirm you are permitted to display the Juventus, LaLiga, Los Angeles Knight Riders and flame mascot logos. Give the flame mascot its proper name in `siteConfig.partners` so its alt text is accurate.
