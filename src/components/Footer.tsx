@@ -12,7 +12,6 @@ export function Footer({
   nav: Dictionary["nav"];
   a11y: Dictionary["a11y"];
 }) {
-  const { minimumAge, helpUrl, helpName } = siteConfig.responsibleGambling;
   const year = new Date().getFullYear();
 
   return (
@@ -66,29 +65,6 @@ export function Footer({
                 <a href="/terms">{t.terms}</a>
               </li>
             </ul>
-          </div>
-        </div>
-
-        <div className="footer-notices">
-          {/* REVIEW BEFORE LAUNCH: wording is driven by siteConfig.operator.relationship. */}
-          <div className="notice">
-            <h3>{t.relationshipTitle}</h3>
-            <p>{fmt(t.relationship[siteConfig.operator.relationship], { operator: siteConfig.operator.legalName })}</p>
-          </div>
-          <div className="notice">
-            <h3>
-              <span className="age-badge" aria-hidden="true">
-                {minimumAge}+
-              </span>
-              {fmt(t.rgTitle, { age: minimumAge })}
-            </h3>
-            <p>
-              {fmt(t.rg, { age: minimumAge })}{" "}
-              <a href={helpUrl} target="_blank" rel="noopener noreferrer">
-                {helpName}
-              </a>
-              .
-            </p>
           </div>
         </div>
 
