@@ -1,4 +1,4 @@
--- melbetagents.org database schema (PostgreSQL 13+).
+-- Melbet Agents database schema (PostgreSQL 13+).
 -- Idempotent: safe to run repeatedly with `npm run db:migrate`.
 
 CREATE TABLE IF NOT EXISTS agent_applications (

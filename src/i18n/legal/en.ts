@@ -8,9 +8,9 @@ export type LegalDoc = { title: string; description: string; intro: string; sect
 
 export const privacyEn: LegalDoc = {
   title: "Privacy Policy",
-  description: "How applications submitted on {site} are collected, used and protected.",
+  description: "How applications submitted to {site} through this website are collected, used and protected.",
   intro:
-    "This policy explains what information {operator} collects when you apply through {site}, why it is collected and the choices you have.",
+    "This policy explains what information {operator} collects when you apply through this website, why it is collected and the choices you have.",
   sections: [
     {
       h: "Information we collect",
@@ -84,13 +84,13 @@ export const privacyEn: LegalDoc = {
 
 export const termsEn: LegalDoc = {
   title: "Terms of Use",
-  description: "Terms that apply when you use {site} and submit an agent application.",
-  intro: "By using {site} you agree to these terms. If you do not agree, please do not use the website.",
+  description: "Terms that apply when you use this website and submit a {site} agent application.",
+  intro: "By using this website you agree to these terms. If you do not agree, please do not use the website.",
   sections: [
     {
       h: "About this website",
       p: [
-        "{site} is operated by {operator} to provide information about becoming a payment agent and to collect applications. {relationship}",
+        "This website is operated by {operator} to provide information about becoming a payment agent and to collect applications.",
       ],
     },
     {

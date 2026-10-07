@@ -14,7 +14,7 @@ export const compareGuideEn = {
   breadcrumbHome: "Home",
   intro: [
     "People exploring betting payment agent opportunities often look at more than one brand, including Melbet and 1xBet. This guide explains what a payment agent does, how that differs from a referral affiliate, and which questions to ask any program before you commit your time or money.",
-    "It is written by the operator of melbetagents.org, which accepts applications for Melbet payment agents only. This website is not affiliated with 1xBet, does not recruit agents for 1xBet and does not publish 1xBet’s terms. For any program, rely on the written terms you receive from that program.",
+    "This guide is published by Melbet. This website accepts applications for Melbet payment agents only. This website is not affiliated with 1xBet, does not recruit agents for 1xBet and does not publish 1xBet’s terms. For any program, rely on the written terms you receive from that program.",
   ],
   roles: {
     heading: "Payment agents and referral affiliates are different roles",

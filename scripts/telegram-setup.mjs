@@ -44,7 +44,7 @@ try {
     console.log(`Group: ${chat.title} (${chat.type}, id ${chat.id})`);
     const sent = await call("sendMessage", {
       chat_id: chatId,
-      text: "🧪 TEST — melbetagents.org can post to this group. No applicant data in this message.",
+      text: "🧪 TEST — Melbet agent applications can post to this group. No applicant data in this message.",
     });
     console.log(`Test message sent (message id ${sent.message_id}).`);
     process.exit(0);

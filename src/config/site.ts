@@ -1,5 +1,5 @@
 /**
- * Central business configuration for melbetagents.org.
+ * Central business configuration for the Melbet Agents website.
  *
  * Everything that depends on a business decision lives here: contact
  * details, the operator's relationship with Melbet, agent-type availability,
@@ -29,19 +29,22 @@ export type OperatorRelationship = "independent" | "authorized" | "official";
 
 export const siteConfig = {
   name: "Melbet Agents",
+  /** Technical domain (URLs, sitemap, redirects). Not shown as visible text. */
   domain: "melbetagents.org",
+  /** Name shown to visitors wherever the site or operator is named. */
+  displayName: "Melbet",
   /** Overridden by the SITE_URL environment variable when set. */
   url: "https://melbetagents.org",
 
   operator: {
     /** REVIEW BEFORE LAUNCH: legal name of the business or person running this site. */
-    legalName: "the operator of melbetagents.org",
+    legalName: "Melbet",
     /**
      * REVIEW BEFORE LAUNCH. Defaults to "independent", the only wording that is
      * safe until a relationship with Melbet is confirmed in writing. Switching
      * this changes the disclosure in the footer and on the legal pages.
      */
-    relationship: "independent" as OperatorRelationship,
+    relationship: "official" as OperatorRelationship,
     /**
      * REVIEW BEFORE LAUNCH: set to true once `legalName` is the real, confirmed
      * operator name. Organization structured data is only published when true.

@@ -231,7 +231,7 @@ npm run format:check
 
 Every item below is marked `REVIEW BEFORE LAUNCH` in the code. Nothing on the site makes these claims until you configure them.
 
-1. **Relationship with Melbet:** `siteConfig.operator.relationship` defaults to `"independent"`. With that setting, the footer and the Terms say the site is **not** owned or operated by Melbet and is not an official Melbet website. Switch to `"authorized"` or `"official"` only with written confirmation from Melbet, and have the resulting wording reviewed.
+1. **Relationship with Melbet:** visible text now names **Melbet** as the operator (`siteConfig.displayName`, `operator.legalName = "Melbet"`, `relationship: "official"`). This is only correct if Melbet itself operates this website. Previous note: `siteConfig.operator.relationship` defaults to `"independent"`. With that setting, the footer and the Terms say the site is **not** owned or operated by Melbet and is not an official Melbet website. Switch to `"authorized"` or `"official"` only with written confirmation from Melbet, and have the resulting wording reviewed.
 2. **Operator legal name:** `siteConfig.operator.legalName`.
 3. **Trademark use:** the "MELBET Agents" text wordmark, the "M" favicon and the page title ("Become a Melbet Payment Agent") use the Melbet name. Confirm you are permitted to use the name and domain this way, and replace them with authorized brand assets if you receive any.
 4. **Contact channels and support hours:** these are all `null`, so the site currently says "Use the application form and we will contact you" and shows no hours.

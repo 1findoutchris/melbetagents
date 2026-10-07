@@ -69,7 +69,7 @@ export function Footer({
         </div>
 
         <div className="footer-bottom">
-          <p>{fmt(t.copyright, { year, site: siteConfig.domain })}</p>
+          <p>{fmt(t.copyright, { year, site: siteConfig.displayName })}</p>
           <p>
             <a href="/privacy">{t.privacy}</a> · <a href="/terms">{t.terms}</a>
           </p>

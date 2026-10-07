@@ -15,7 +15,7 @@ export function LegalPage({ doc, locale }: { doc: LegalDoc; locale: Locale }) {
       : "Contact details will be published on this page. Until then, you can reply to any message we send you about your application.";
   const values = {
     operator: siteConfig.operator.legalName,
-    site: siteConfig.domain,
+    site: siteConfig.displayName,
     age: siteConfig.responsibleGambling.minimumAge,
     retention: siteConfig.legal.retentionMonths,
     contact,
