@@ -384,8 +384,6 @@ export const en = {
   legal: {
     backHome: "Back to home",
     lastUpdated: "Last updated",
-    reviewNotice:
-      "This document is a template prepared for the site operator. It must be reviewed by the operator and, where appropriate, a legal adviser before launch.",
   },
   notFound: {
     title: "Page not found",
