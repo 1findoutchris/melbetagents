@@ -2010,24 +2010,6 @@ fieldset.form-section legend + * {
   text-align: center;
 }
 
-.logo-strip__label {
-  margin-bottom: 28px;
-  color: var(--subtle);
-  font-family: var(--font-body);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-.logo-strip__note {
-  max-width: 620px;
-  margin: 28px auto 0;
-  color: var(--subtle);
-  font-size: 0.75rem;
-  line-height: 1.5;
-}
-
 .partner-logos {
   display: flex;
   flex-wrap: wrap;
@@ -2073,12 +2055,6 @@ fieldset.form-section legend + * {
   top: clamp(20px, 2.6vw, 32px);
   left: clamp(24px, 3vw, 40px);
   opacity: 0.92;
-}
-
-.panel__logos-note {
-  margin-top: 10px;
-  color: var(--subtle);
-  font-size: 0.6875rem;
 }
 
 /* --------------------------------------------------------------------------
