@@ -164,10 +164,8 @@ export const en = {
     note: "Product availability varies by country. Agent commission is based on your agreed terms, not on individual products.",
   },
   partners: {
-    heading: "The football your players follow",
+    stripLabel: "Logos",
     logoAlt: "{name} logo",
-    disclaimer:
-      "Club and league names and logos are trademarks of their respective owners. Their display here does not mean they partner with, sponsor or endorse this website or its agent program.",
   },
   howItWorks: {
     eyebrow: "How it works",

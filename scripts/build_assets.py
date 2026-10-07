@@ -71,16 +71,23 @@ juv = (ASSETS / "partners" / "juventus-source.svg").read_text()
 # Same artwork and viewBox; only the single fill colour is reversed to white.
 juv = juv.replace("<path ", '<path fill="#ffffff" ', 1)
 (PUBLIC / "partners" / "juventus.svg").write_text(juv)
-lal = np.asarray(Image.open(ASSETS / "partners" / "laliga-source.jpg").convert("L")).astype(float)
-# Dark ink becomes opaque white; the white background becomes transparent.
-ink = np.clip((255 - lal - 8) / (247 - 8), 0, 1)
-lal_img = Image.fromarray(np.dstack([np.full(lal.shape, 255.0)] * 3 + [ink * 255]).round().astype(np.uint8), "RGBA")
-lal_img = lal_img.crop(lal_img.getbbox())  # trims empty margin only
-lal_h = 216
-lal_img = lal_img.resize((round(lal_img.width * lal_h / lal_img.height), lal_h), Image.LANCZOS)
-lal_img.save(PUBLIC / "partners" / "laliga.png", optimize=True)
-lal_img.save(PUBLIC / "partners" / "laliga.webp", quality=90, method=6)
-print("laliga", lal_img.size)
+
+
+def reversed_mark(source: str, out_name: str, height: int = 216) -> None:
+    """Dark artwork on a white background -> white artwork on transparent, trimmed to its edges."""
+    lum = np.asarray(Image.open(ASSETS / "partners" / source).convert("L")).astype(float)
+    ink = np.clip((255 - lum - 8) / (247 - 8), 0, 1)
+    img = Image.fromarray(np.dstack([np.full(lum.shape, 255.0)] * 3 + [ink * 255]).round().astype(np.uint8), "RGBA")
+    img = img.crop(img.getbbox())  # trims empty margin only
+    img = img.resize((round(img.width * height / img.height), height), Image.LANCZOS)
+    img.save(PUBLIC / "partners" / f"{out_name}.png", optimize=True)
+    img.save(PUBLIC / "partners" / f"{out_name}.webp", quality=90, method=6)
+    print(out_name, img.size)
+
+
+reversed_mark("laliga-source.jpg", "laliga")
+reversed_mark("la-knight-riders-source.jpg", "la-knight-riders")
+reversed_mark("flame-mascot-source.png", "flame-mascot")
 
 # --- Footballs --------------------------------------------------------------------
 tmp = Path(tempfile.mkdtemp())

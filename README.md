@@ -107,11 +107,9 @@ All images are produced by `npm run assets` (`scripts/build_assets.py`, which ne
 
 No third-party photography is used. To swap in licensed photography later, replace the files in `public/images/` and keep the same names, or update `src/components/Brand.tsx` and `src/components/SportsShowcase.tsx`.
 
-### Club and league logos
+### Logos
 
-The supplied Juventus and LaLiga logos are kept as sources in `assets/partners/`. The site serves white, single-colour versions with transparent backgrounds from `public/partners/`. The shapes are unchanged: they are trimmed only to their outer edges and never stretched. They appear in two places: small in the sports section's main panel, and larger in the strip above the final call to action. Both sizes keep each logo's proportions and give them a similar visual weight.
-
-They are configured in `siteConfig.partners`. While `relationshipConfirmed` is `false`, the strip uses the neutral heading "The football your players follow" and a trademark notice saying the clubs do not partner with or endorse this site. Set `confirmedLabel` and `relationshipConfirmed: true` only when a relationship is confirmed in writing. Set `enabled: false` to remove both placements.
+The supplied logos (Juventus, LaLiga, Los Angeles Knight Riders and the flame mascot) are kept as sources in `assets/partners/`. The site serves white, single-colour versions with transparent backgrounds from `public/partners/`. The shapes are unchanged: they are trimmed only to their outer edges and never stretched. The logos appear with no surrounding text, small in the sports section's main panel and larger in the strip above the final call to action. To add, remove or reorder logos, or to hide them, edit `siteConfig.partners`.
 
 ## International phone fields
 
@@ -198,5 +196,5 @@ Every item below is marked `REVIEW BEFORE LAUNCH` in the code. Nothing on the si
 9. **Legal review:** the Privacy Policy and Terms are templates. Review them, especially the legal basis, data sharing, retention (24 months by default) and contact details. Then remove the yellow review notice in `src/components/LegalPage.tsx`.
 10. **Legality by market:** gambling and payment-agent activity is regulated differently in each country. Confirm where you can lawfully recruit, and restrict the country list to match.
 11. **Responsible-gambling resource:** this defaults to Gambling Therapy (international). Replace it with a local service if appropriate.
-12. **Club and league logos (Juventus, LaLiga):** these are shown with a neutral heading and a trademark notice. Confirm you are permitted to display them, and set `siteConfig.partners.relationshipConfirmed` only if a written relationship exists.
+12. **Logos:** confirm you are permitted to display the Juventus, LaLiga, Los Angeles Knight Riders and flame mascot logos. Give the flame mascot its proper name in `siteConfig.partners` so its alt text is accurate.
 13. **Operator confirmation:** set `siteConfig.operator.confirmed: true` once `legalName` is real, so `Organization` structured data is published.

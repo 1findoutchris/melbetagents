@@ -28,19 +28,14 @@ export function PartnerLogos({ t, size }: { t: Dictionary["partners"]; size: "sm
   );
 }
 
-/** Logo strip near the bottom of the page. Wording depends on siteConfig.partners. */
+/** Logo strip near the bottom of the page: logos only, no surrounding text. */
 export function LogoStrip({ t }: { t: Dictionary["partners"] }) {
-  const { enabled, relationshipConfirmed, confirmedLabel, logos } = siteConfig.partners;
+  const { enabled, logos } = siteConfig.partners;
   if (!enabled || logos.length === 0) return null;
-  const confirmed = relationshipConfirmed && Boolean(confirmedLabel);
   return (
-    <section className="logo-strip" aria-labelledby="logo-strip-title">
+    <section className="logo-strip" aria-label={t.stripLabel}>
       <div className="container">
-        <h2 id="logo-strip-title" className="logo-strip__label">
-          {confirmed ? confirmedLabel : t.heading}
-        </h2>
         <PartnerLogos t={t} size="lg" />
-        {!confirmed && <p className="logo-strip__note">{t.disclaimer}</p>}
       </div>
     </section>
   );
