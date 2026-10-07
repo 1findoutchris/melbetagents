@@ -227,7 +227,7 @@ export function ApplicationForm({ t, agentTypeLabels, countries, currencies, loc
           <strong>{status.reference}</strong>
         </div>
         <div>
-          <button type="button" className="btn btn--ghost" onClick={startOver}>
+          <button type="button" className="btn btn--outline" onClick={startOver}>
             {t.status.newApplication}
           </button>
         </div>

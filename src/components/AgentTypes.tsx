@@ -1,14 +1,9 @@
-import { siteConfig, visibleAgentTypes, type AgentTypeId } from "@/config/site";
+import { siteConfig, visibleAgentTypes } from "@/config/site";
 import type { Dictionary } from "@/i18n";
-import { IconArrowRight, IconCash, IconCheck, IconNetwork, IconWallet } from "./Icons";
+import { DisplayTitle, Honeycomb } from "./Brand";
+import { IconArrowRight, IconCheck } from "./Icons";
 
-const ICONS: Record<AgentTypeId, typeof IconCash> = {
-  cash: IconCash,
-  online: IconWallet,
-  network: IconNetwork,
-};
-
-export function AgentTypes({ t, applyLabel }: { t: Dictionary["agentTypes"]; applyLabel: string }) {
+export function AgentTypes({ t }: { t: Dictionary["agentTypes"] }) {
   const types = visibleAgentTypes();
   if (types.length === 0) return null;
 
@@ -17,29 +12,27 @@ export function AgentTypes({ t, applyLabel }: { t: Dictionary["agentTypes"]; app
       <div className="container">
         <div className="section-head" data-reveal>
           <p className="eyebrow">{t.eyebrow}</p>
-          <h2 id="agent-types-title" className="section-title">
-            {t.title}
-          </h2>
+          <DisplayTitle id="agent-types-title" lines={t.titleLines} accent={t.titleAccent} />
           <p className="section-lead">{t.lead}</p>
         </div>
-        <ul className="card-grid" role="list" style={{ margin: 0, padding: 0, listStyle: "none" }}>
+        <ul className="types">
           {types.map((id, i) => {
             const item = t.items[id];
-            const Icon = ICONS[id];
             const open = siteConfig.agentTypes[id] === "open";
             return (
-              <li key={id} className="card type-card" data-reveal style={{ ["--reveal-i" as string]: i }}>
-                <span className={`type-card__badge${open ? " type-card__badge--open" : ""}`}>
-                  {open ? t.badgeOpen : t.badgeConfirm}
-                </span>
-                <h3 className="type-card__title">
-                  <span className="card__icon">
-                    <Icon size={22} />
+              <li key={id} className={`type type--${id}`} data-reveal style={{ ["--reveal-i" as string]: i }}>
+                {id === "network" ? <Honeycomb /> : <span className="type__art" aria-hidden="true" />}
+                <div className="type__top">
+                  <span className="type__num" aria-hidden="true">
+                    {String(i + 1).padStart(2, "0")}
                   </span>
-                  {item.title}
-                </h3>
-                <p className="card__body">{item.summary}</p>
-                <ul>
+                  <span className={`type__badge${open ? " type__badge--open" : ""}`}>
+                    {open ? t.badgeOpen : t.badgeConfirm}
+                  </span>
+                </div>
+                <h3 className="type__title">{item.title}</h3>
+                <p className="type__summary">{item.summary}</p>
+                <ul className="type__points">
                   {item.points.map((point) => (
                     <li key={point}>
                       <IconCheck size={16} />
@@ -47,9 +40,9 @@ export function AgentTypes({ t, applyLabel }: { t: Dictionary["agentTypes"]; app
                     </li>
                   ))}
                 </ul>
-                <div className="type-card__cta">
+                <div className="type__cta">
                   <a className="text-link" href="#apply" data-agent-type={id}>
-                    {applyLabel}
+                    {t.cta}
                     <span className="sr-only">: {item.title}</span>
                     <IconArrowRight size={18} />
                   </a>

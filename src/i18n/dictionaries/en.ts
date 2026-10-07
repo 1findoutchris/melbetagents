@@ -5,10 +5,10 @@
  */
 export const en = {
   meta: {
-    title: "Become a Melbet Payment Agent | Apply Online",
+    title: "Melbet Agents | Apply to Become an Agent",
     description:
-      "Apply to become a payment agent and help eligible players with deposits and withdrawals. Requirements, onboarding and commission terms are explained before you start.",
-    ogAlt: "Melbet Agents — build your payment agency",
+      "Apply to become a Melbet payment agent and help eligible players make deposits and withdrawals. Requirements, onboarding and commission terms are discussed with you before you start.",
+    ogAlt: "Become an agent. Build your payment business.",
   },
   a11y: {
     skipToContent: "Skip to main content",
@@ -17,6 +17,7 @@ export const en = {
     mainNav: "Main navigation",
     footerNav: "Footer navigation",
     home: "Melbet Agents home",
+    logoAlt: "Melbet",
   },
   nav: {
     about: "About",
@@ -25,37 +26,20 @@ export const en = {
     howItWorks: "How It Works",
     faq: "FAQ",
     apply: "Become an Agent",
-    applyShort: "Apply Now",
+    applyShort: "Apply",
   },
   hero: {
-    eyebrow: "Payment agent recruitment",
-    titleLead: "Become a Melbet Agent.",
-    titleAccent: "Build Your Payment Business.",
-    lead: "Apply to help eligible players process deposits and withdrawals, with onboarding support and commission terms agreed before you start.",
-    primaryCta: "Become an Agent",
+    eyebrow: "Melbet agent program",
+    titleLines: ["Become an agent.", "Build your"],
+    titleAccent: "Payment business.",
+    lead: "Help eligible players make deposits and withdrawals. Apply today to discuss agent requirements, onboarding, and commission terms.",
+    primaryCta: "Apply Now",
     secondaryCta: "How It Works",
-    points: ["Free to apply", "No account or password needed", "{age}+ only"],
-  },
-  dashboard: {
-    label: "Illustrative example",
-    labelNote: "Sample figures for illustration only. Not real earnings or balances.",
-    title: "Transaction overview",
-    balance: "Operating balance",
-    balanceTrend: "Updated after each transaction",
-    activity: "Recent activity",
-    commission: "Commission tracking",
-    commissionNote: "Per agreed terms",
-    deposit: "Deposit",
-    withdrawal: "Withdrawal",
-    completed: "Completed",
-    pending: "Pending",
-    days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    ariaDescription:
-      "Illustrative transaction overview showing how an agent might see their operating balance, recent deposits and withdrawals, and commission tracking. All figures are examples, not real data.",
   },
   about: {
     eyebrow: "About the role",
-    title: "Payment agents keep local deposits and withdrawals moving",
+    titleLines: ["The local link between"],
+    titleAccent: "players and payments.",
     lead: "A payment agent is a trusted local contact who helps eligible players fund their accounts and receive withdrawals, following agreed procedures and using an operating balance.",
     columns: [
       {
@@ -64,7 +48,7 @@ export const en = {
       },
       {
         title: "Who it suits",
-        body: "Reliable people with a good local network, such as shop owners, mobile money agents and cashiers, as well as newcomers who are ready to follow clear procedures.",
+        body: "Reliable people with a strong local network, such as shop owners, mobile money agents and cashiers, as well as newcomers ready to follow clear procedures.",
       },
       {
         title: "How onboarding works",
@@ -74,58 +58,61 @@ export const en = {
     cta: "Become an Agent",
   },
   benefits: {
-    eyebrow: "Why become an agent",
-    title: "A structured way to run a payment agency",
-    lead: "Agents handle real money for real customers, so the program is built around clear terms, practical tools and support while you get started.",
+    eyebrow: "Benefits",
+    titleLines: ["Everything you need", "to start"],
+    titleAccent: "your agency.",
+    lead: "Agents handle real money for real players, so the program is built around clear terms, practical tools and support from the start.",
     items: [
       {
         title: "Commission under agreed terms",
-        body: "Earn commission on the transactions you process, at rates set out in your agent agreement before you begin. Nothing is assumed or promised in advance.",
+        body: "Earn commission on the transactions you process, at rates set out in your agent agreement before you begin.",
       },
       {
         title: "Mobile-friendly operations",
-        body: "Handle deposits, withdrawals and balance checks from your phone, so you can serve customers wherever you work.",
+        body: "Handle deposits, withdrawals and balance checks from your phone, wherever you serve players.",
       },
       {
-        title: "Onboarding assistance",
-        body: "Get guidance on verification, setup and day-to-day procedures, so you understand how everything works before your first transaction.",
+        title: "Onboarding guidance",
+        body: "Step-by-step help with verification, setup and daily procedures before your first transaction.",
       },
       {
-        title: "Transaction & balance tracking",
-        body: "Keep a clear record of every transaction and your operating balance, making reconciliation and planning straightforward.",
+        title: "Transaction tracking",
+        body: "A clear record of every transaction and your operating balance makes reconciliation straightforward.",
       },
       {
-        title: "Direct support contacts",
-        body: "Know who to reach when you have a question about a transaction, your account or your terms.",
+        title: "Support communication",
+        body: "Know who to contact when you have a question about a transaction, your balance or your terms.",
       },
       {
         title: "Room to grow",
-        body: "Where the program permits it, experienced agents may be able to expand into additional locations or coordinate a team.",
+        body: "Where the program permits it, experienced agents may expand to more locations or coordinate a team.",
       },
     ],
   },
   agentTypes: {
     eyebrow: "Agent types",
-    title: "Choose the role that fits how you work",
-    lead: "Which roles are offered depends on your country and the program’s current needs. We confirm availability and terms with you before you commit to anything.",
+    titleLines: ["Choose the role that"],
+    titleAccent: "fits how you work.",
+    lead: "Which roles are offered depends on your country and current needs. Our team confirms availability and terms with you before you commit to anything.",
     badgeOpen: "Accepting applications",
     badgeConfirm: "Availability confirmed during onboarding",
+    cta: "Apply Now",
     items: {
       cash: {
         title: "Cash agent",
-        summary: "Helps eligible customers with local deposits and withdrawals in cash.",
+        summary: "Helps eligible players with local deposits and withdrawals in cash.",
         points: [
-          "Serve customers in your local area",
+          "Serve players in your local area",
           "Process deposits and pay out withdrawals",
-          "Maintain an operating balance for transactions",
+          "Maintain an operating balance",
         ],
       },
       online: {
         title: "Online payment agent",
         summary: "Supports deposits and withdrawals through approved digital payment methods.",
         points: [
-          "Work with approved mobile money or e-wallet methods",
-          "Assist customers remotely",
+          "Work with approved mobile money or e-wallets",
+          "Assist players remotely",
           "Follow verification and record-keeping procedures",
         ],
       },
@@ -140,22 +127,50 @@ export const en = {
       },
     },
   },
+  sports: {
+    eyebrow: "The platform",
+    titleLines: ["A world of sports."],
+    titleAccent: "A stronger connection.",
+    lead: "Players use Melbet to follow the sports they love. As an agent, you are the trusted local connection that helps eligible players move money in and out.",
+    panels: [
+      {
+        tag: "Football",
+        title: "Matchday, every day",
+        text: "Football is followed in every neighbourhood. Agents help eligible local players with deposits and withdrawals around the games they care about.",
+        alt: "A football on a floodlit pitch at night",
+      },
+      {
+        tag: "Local",
+        title: "Close to your players",
+        text: "A reliable agent nearby makes the platform easier to use for players who prefer cash or local payment methods.",
+        alt: "A football resting in a goal net",
+      },
+      {
+        tag: "And more",
+        title: "More than football",
+        text: "The platform covers a wide range of sports and other products.",
+        alt: "",
+      },
+    ],
+    note: "Product availability varies by country. Agent commission is based on your agreed terms, not on individual products.",
+  },
   howItWorks: {
     eyebrow: "How it works",
-    title: "From application to your first transaction",
-    lead: "Five clear steps. You will know the requirements and the terms before you are asked to commit.",
+    titleLines: ["Five steps to"],
+    titleAccent: "your first transaction.",
+    lead: "You will know the requirements and the terms before you are asked to commit.",
     steps: [
-      { title: "Apply", body: "Complete the application form. No account or password is needed, just your details." },
+      { title: "Apply", body: "Complete the application form. No account or password needed, just your details." },
       {
         title: "Eligibility review",
-        body: "Our team reviews your application and contacts you to discuss requirements and available agent types.",
+        body: "Our team reviews your application and contacts you to discuss requirements and agent types.",
       },
       {
         title: "Verification and terms",
         body: "Complete identity verification and review the agent agreement, including commission terms.",
       },
       {
-        title: "Account setup and funding",
+        title: "Setup and operating balance",
         body: "After approval, our team sets up your agent tools with you and you fund the agreed operating balance.",
       },
       {
@@ -166,14 +181,14 @@ export const en = {
   },
   form: {
     eyebrow: "Application",
-    title: "Apply to become an agent",
-    lead: "It takes about three minutes. Required fields are marked. We will only use your details to review and discuss your application.",
+    titleLines: ["Apply to become"],
+    titleAccent: "an agent.",
+    lead: "It takes about three minutes. No account or password is needed. Our team reviews every application and contacts you using the details you provide.",
     sideTitle: "Before you apply",
     sidePoints: [
       "You must be {age} or older.",
       "Applying is free and does not commit you to anything.",
-      "Requirements, starting balance and commission terms are confirmed with you directly.",
-      "We will contact you on Telegram or by phone.",
+      "Requirements and commission terms are confirmed with you directly.",
     ],
     sideContactTitle: "Questions first?",
     required: "Required",
@@ -251,7 +266,8 @@ export const en = {
   },
   faq: {
     eyebrow: "FAQ",
-    title: "Questions applicants often ask",
+    titleLines: ["Questions"],
+    titleAccent: "applicants ask.",
     items: [
       {
         q: "What does a payment agent do?",
@@ -296,9 +312,10 @@ export const en = {
     ],
   },
   finalCta: {
-    title: "Ready to start your agency?",
-    body: "Send your application today. We will walk you through the requirements and terms before you commit to anything.",
-    cta: "Become an Agent",
+    titleLines: ["Ready to become"],
+    titleAccent: "a Melbet agent?",
+    body: "Send your application today. Our team will walk you through the requirements and terms before you commit to anything.",
+    cta: "Apply Now",
   },
   footer: {
     tagline: "Recruitment and onboarding for payment agents.",
@@ -308,7 +325,8 @@ export const en = {
     contactWhatsapp: "WhatsApp",
     supportHours: "Support hours",
     contactPending: "Use the application form and we will contact you.",
-    linksTitle: "Information",
+    linksTitle: "Explore",
+    legalTitle: "Legal",
     privacy: "Privacy Policy",
     terms: "Terms of Use",
     relationshipTitle: "About this website",
@@ -323,7 +341,7 @@ export const en = {
     rg: "Gambling services are only for people aged {age} and over and may not be legal in every country. Gambling can be addictive — if it stops being fun, take a break or get free, confidential help from",
     copyright: "© {year} {site}. All rights reserved.",
   },
-  stickyCta: "Become an Agent",
+  stickyCta: "Apply Now",
   legal: {
     backHome: "Back to home",
     lastUpdated: "Last updated",
