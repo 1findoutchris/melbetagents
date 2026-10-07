@@ -4,6 +4,7 @@ import { validateApplication, type SubmissionResponse } from "@/lib/application"
 import { markNotified, saveApplication } from "@/lib/applications-store";
 import { isDatabaseConfigured } from "@/lib/db";
 import { consumeLocal, rateLimitSettings } from "@/lib/rate-limit";
+import { serverPhoneLib } from "@/lib/phone-server";
 import { notifyNewApplication } from "@/lib/telegram";
 import { isLocale } from "@/i18n";
 
@@ -72,7 +73,7 @@ export async function POST(request: NextRequest) {
   const submissionId = typeof body.submissionId === "string" ? body.submissionId : "";
   if (!UUID.test(submissionId)) return reply({ ok: false, error: "rejected" }, 400);
 
-  const result = validateApplication(body);
+  const result = validateApplication(body, serverPhoneLib);
   if (!result.ok) return reply({ ok: false, error: "validation", fields: result.errors }, 422);
 
   if (!isDatabaseConfigured()) {

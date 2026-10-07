@@ -5,10 +5,10 @@
  */
 export const en = {
   meta: {
-    title: "Melbet Agents | Apply to Become an Agent",
+    title: "Become a Melbet Agent | Apply at Melbet Agents",
     description:
-      "Apply to become a Melbet payment agent and help eligible players make deposits and withdrawals. Requirements, onboarding and commission terms are discussed with you before you start.",
-    ogAlt: "Become an agent. Build your payment business.",
+      "Interested in becoming a Melbet payment agent? Learn about agent requirements, deposits and withdrawals, and submit your application at melbetagents.org.",
+    ogAlt: "Become a Melbet payment agent. Build your payment business.",
   },
   a11y: {
     skipToContent: "Skip to main content",
@@ -30,32 +30,41 @@ export const en = {
   },
   hero: {
     eyebrow: "Melbet agent program",
-    titleLines: ["Become an agent.", "Build your"],
-    titleAccent: "Payment business.",
+    titleLines: ["Become a Melbet"],
+    titleAccent: "Payment Agent.",
+    tagline: "Build your payment business.",
     lead: "Help eligible players make deposits and withdrawals. Apply today to discuss agent requirements, onboarding, and commission terms.",
     primaryCta: "Apply Now",
     secondaryCta: "How It Works",
   },
   about: {
     eyebrow: "About the role",
-    titleLines: ["The local link between"],
-    titleAccent: "players and payments.",
-    lead: "A payment agent is a trusted local contact who helps eligible players fund their accounts and receive withdrawals, following agreed procedures and using an operating balance.",
+    titleLines: ["What a Melbet"],
+    titleAccent: "payment agent does.",
+    lead: "A Melbet payment agent is a trusted local contact who helps eligible players fund their accounts and receive withdrawals, following agreed procedures and using an operating balance. If you are researching how to become a betting agent, these are the essentials to understand before you apply.",
     columns: [
       {
-        title: "What agents do",
-        body: "Process deposits and pay out withdrawals for eligible players, in cash or through approved payment methods, and keep accurate records of every transaction.",
+        title: "Responsibilities",
+        body: "Process deposits and pay out withdrawals for eligible players, in cash or through approved payment methods. Keep an accurate record of every transaction, follow verification procedures, and handle players’ money and personal details with care.",
       },
       {
-        title: "Who it suits",
-        body: "Reliable people with a strong local network, such as shop owners, mobile money agents and cashiers, as well as newcomers ready to follow clear procedures.",
+        title: "Eligibility",
+        body: "You must be at least {age} years old and able to act as a payment agent lawfully where you live and work. Which countries and agent types are open is confirmed individually, so applying does not guarantee approval.",
       },
       {
-        title: "How onboarding works",
-        body: "You only fill in the application form. Our team reviews it, contacts you to discuss requirements and terms, and guides you through verification and setup.",
+        title: "What you need to apply",
+        body: "Your name, country and city, a phone number and a Telegram username. A WhatsApp number, an estimate of your starting capital and details of past payment or agent experience are optional, but help our team review your application. No account or password is needed.",
+      },
+      {
+        title: "Operating balance",
+        body: "Agents fund player deposits from an operating balance that they top up themselves. The amount you need depends on your country, agent type and expected activity, and it is agreed with you before you start. There is no published fixed minimum.",
+      },
+      {
+        title: "Onboarding",
+        body: "After you submit your Melbet agent application, our team reviews it and contacts you to discuss eligibility, identity verification and the agent agreement, including commission terms. Your tools are set up only after you have agreed the terms.",
       },
     ],
-    cta: "Become an Agent",
+    cta: "Apply Now",
   },
   benefits: {
     eyebrow: "Benefits",
@@ -100,7 +109,7 @@ export const en = {
     items: {
       cash: {
         title: "Cash agent",
-        summary: "Helps eligible players with local deposits and withdrawals in cash.",
+        summary: "As a Melbet cash agent, you help eligible players with local deposits and withdrawals in cash.",
         points: [
           "Serve players in your local area",
           "Process deposits and pay out withdrawals",
@@ -154,6 +163,12 @@ export const en = {
     ],
     note: "Product availability varies by country. Agent commission is based on your agreed terms, not on individual products.",
   },
+  partners: {
+    heading: "The football your players follow",
+    logoAlt: "{name} logo",
+    disclaimer:
+      "Club and league names and logos are trademarks of their respective owners. Their display here does not mean they partner with, sponsor or endorse this website or its agent program.",
+  },
   howItWorks: {
     eyebrow: "How it works",
     titleLines: ["Five steps to"],
@@ -180,9 +195,9 @@ export const en = {
     ],
   },
   form: {
-    eyebrow: "Application",
-    titleLines: ["Apply to become"],
-    titleAccent: "an agent.",
+    eyebrow: "Apply now",
+    titleLines: ["Melbet agent"],
+    titleAccent: "application.",
     lead: "It takes about three minutes. No account or password is needed. Our team reviews every application and contacts you using the details you provide.",
     sideTitle: "Before you apply",
     sidePoints: [
@@ -199,19 +214,26 @@ export const en = {
       role: "Your agency",
     },
     fields: {
-      fullName: { label: "Full name", placeholder: "As shown on your ID" },
+      fullName: { label: "Full name", placeholder: "Your full name" },
       country: { label: "Country", placeholder: "Select your country" },
-      city: { label: "City", placeholder: "e.g. Addis Ababa" },
+      city: { label: "City", placeholder: "Your city" },
       phone: {
         label: "Phone number",
-        hint: "Include your country code, e.g. +251 91 234 5678",
-        placeholder: "+251 91 234 5678",
+        codeLabel: "Country code",
+        codePlaceholder: "Select country code",
+        numberPlaceholder: "Enter phone number",
+        examplePlaceholder: "e.g. {example}",
+        hint: "Select your country code, then enter your number.",
+        selectedHint: "Number for {country} (+{dial}). Enter it the way you would dial it locally.",
       },
-      telegram: { label: "Telegram username", hint: "5–32 characters, e.g. @yourname", placeholder: "@yourname" },
+      telegram: {
+        label: "Telegram username",
+        hint: "5–32 characters, e.g. @yourusername",
+        placeholder: "@yourusername",
+      },
       whatsapp: {
         label: "WhatsApp number",
-        hint: "With country code. Leave empty if same as phone or not used.",
-        placeholder: "+251 91 234 5678",
+        hint: "Optional. Select a country code, then enter the number you use on WhatsApp.",
       },
       agentType: { label: "Preferred agent type", placeholder: "Select an option", unsure: "Not sure yet" },
       capital: {
@@ -237,7 +259,9 @@ export const en = {
       required: "This field is required.",
       tooShort: "This is too short.",
       tooLong: "This is too long.",
-      invalidPhone: "Enter a number with country code, starting with +, e.g. +251912345678.",
+      invalidPhone: "Enter a valid phone number for the selected country code.",
+      selectCode: "Select a country code.",
+      phoneCodeMismatch: "This number uses a different country code. Check the code or the number.",
       invalidTelegram: "Enter a valid username: 5–32 letters, numbers or underscores.",
       invalidChoice: "Choose one of the available options.",
       invalidAmount: "Enter a number without letters, e.g. 500 or 1500.50.",
@@ -270,12 +294,16 @@ export const en = {
     titleAccent: "applicants ask.",
     items: [
       {
-        q: "What does a payment agent do?",
-        a: "A payment agent helps eligible customers fund their accounts and receive withdrawals, either in cash or through approved digital payment methods. Agents follow set procedures for verification and record-keeping and maintain an operating balance used to process transactions.",
+        q: "How do I become a Melbet agent?",
+        a: "Submit the Melbet agent application on this page. Our team reviews it and, if it fits current needs in your area, contacts you on Telegram or by phone to discuss eligibility, verification and terms. There is no account to create and no fee to apply.",
+      },
+      {
+        q: "What does a Melbet payment agent do?",
+        a: "A payment agent helps eligible players fund their accounts and receive withdrawals, either in cash or through approved digital payment methods. Agents follow set procedures for verification and record-keeping and maintain an operating balance used to process transactions.",
       },
       {
         q: "What do I need to apply?",
-        a: "To apply you need to be at least {age} years old and provide your name, location and contact details. During onboarding you will be asked to complete identity verification. Any further requirements for your country and agent type are explained before you commit.",
+        a: "You need to be at least {age} years old and provide your name, country, city, phone number and Telegram username. During onboarding you will be asked to complete identity verification. Any further requirements for your country and agent type are explained before you commit.",
       },
       {
         q: "How much starting capital is required?",
@@ -284,6 +312,18 @@ export const en = {
       {
         q: "How are commissions determined?",
         a: "Commission terms are set out in your agent agreement and depend on factors such as agent type and location. They are explained in full before you start, and you do not need to agree to anything until you have reviewed them.",
+      },
+      {
+        q: "What is the difference between a Melbet cash agent and an online payment agent?",
+        a: "A cash agent handles deposits and withdrawals in person using cash. An online payment agent supports players through approved digital payment methods, such as mobile money where available. Which agent types are open depends on your area.",
+      },
+      {
+        q: "Is a payment agent the same as an affiliate?",
+        a: "No. A payment agent processes player deposits and withdrawals and keeps an operating balance. A referral affiliate promotes a brand and refers new players, usually through tracked links, and does not handle player funds. This website accepts applications for Melbet payment agents only.",
+        link: {
+          href: "/guides/melbet-1xbet-payment-agents",
+          label: "Read our guide to comparing payment agent opportunities",
+        },
       },
       {
         q: "Which countries are supported?",
@@ -295,7 +335,7 @@ export const en = {
       },
       {
         q: "Can I apply without previous experience?",
-        a: "Yes, you can apply. Experience with mobile money, retail or cash handling can help, and we take it into account, but onboarding guidance is provided for new agents.",
+        a: "Yes. Experience with mobile money, retail or cash handling can help and is taken into account, but onboarding guidance is provided for new agents.",
       },
       {
         q: "Can I manage other agents?",
@@ -309,7 +349,7 @@ export const en = {
         q: "Do I need to create an account or password?",
         a: "No. Applying only requires the form on this page. Our team handles review and onboarding afterwards using the contact details you provide.",
       },
-    ],
+    ] as { q: string; a: string; link?: { href: string; label: string } }[],
   },
   finalCta: {
     titleLines: ["Ready to become"],
@@ -327,6 +367,7 @@ export const en = {
     contactPending: "Use the application form and we will contact you.",
     linksTitle: "Explore",
     legalTitle: "Legal",
+    guides: "Agent comparison guide",
     privacy: "Privacy Policy",
     terms: "Terms of Use",
     relationshipTitle: "About this website",

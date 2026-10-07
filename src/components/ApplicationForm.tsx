@@ -22,11 +22,30 @@ import {
   type SubmissionPayload,
   type SubmissionResponse,
 } from "@/lib/application";
+import * as phoneMin from "libphonenumber-js/min";
+import type { CallingCodeOption, PhoneLib } from "@/lib/phone";
 import { fmt, type Dictionary, type Locale } from "@/i18n";
 import { IconAlert, IconArrowRight, IconCheck, IconLock } from "./Icons";
 
+/** Compact metadata for live feedback; the server re-checks with the full numbering plans. */
+const clientPhoneLib: PhoneLib = phoneMin;
+
+type PhonePair = { code: "phoneCountry" | "whatsappCountry"; number: "phone" | "whatsapp" };
+const PHONE: PhonePair = { code: "phoneCountry", number: "phone" };
+const WHATSAPP: PhonePair = { code: "whatsappCountry", number: "whatsapp" };
+
+/** Fields validated together (an error on one can depend on the other). */
+const FIELD_PAIRS: ApplicationField[][] = [
+  ["capitalAmount", "capitalCurrency"],
+  ["phoneCountry", "phone"],
+  ["whatsappCountry", "whatsapp"],
+];
+const relatedFields = (field: ApplicationField): ApplicationField[] =>
+  FIELD_PAIRS.find((pair) => pair.includes(field)) ?? [field];
+
 type Props = {
   t: Dictionary["form"];
+  callingCodes: CallingCodeOption[];
   agentTypeLabels: Record<string, string>;
   countries: { code: string; name: string }[];
   currencies: readonly string[];
@@ -50,7 +69,15 @@ function newSubmissionId(): string {
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
 
-export function ApplicationForm({ t, agentTypeLabels, countries, currencies, locale, minimumAge }: Props) {
+export function ApplicationForm({
+  t,
+  callingCodes,
+  agentTypeLabels,
+  countries,
+  currencies,
+  locale,
+  minimumAge,
+}: Props) {
   const uid = useId();
   const id = (field: string) => `${uid}-${field}`;
 
@@ -92,7 +119,7 @@ export function ApplicationForm({ t, agentTypeLabels, countries, currencies, loc
   };
 
   const revalidate = useCallback((next: ApplicationInput, fields: ApplicationField[] | "all") => {
-    const result = validateApplication(next);
+    const result = validateApplication(next, clientPhoneLib);
     const all = result.ok ? {} : result.errors;
     setErrors((prev) => {
       if (fields === "all") return all;
@@ -111,11 +138,15 @@ export function ApplicationForm({ t, agentTypeLabels, countries, currencies, loc
       const target = event.target;
       const value = target instanceof HTMLInputElement && target.type === "checkbox" ? target.checked : target.value;
       const next = { ...values, [field]: value } as ApplicationInput;
+      // Choosing a country of residence pre-fills empty calling-code fields; applicants can change them.
+      if (field === "country" && typeof value === "string" && callingCodes.some((c) => c.code === value)) {
+        if (!next.phoneCountry) next.phoneCountry = value;
+        if (!next.whatsappCountry) next.whatsappCountry = value;
+      }
       setValues(next);
       if (status.kind === "error") setStatus({ kind: "idle" });
       // Once a field has been visited, re-check it as the user types so errors clear promptly.
-      const related: ApplicationField[] =
-        field === "capitalAmount" || field === "capitalCurrency" ? ["capitalAmount", "capitalCurrency"] : [field];
+      const related = relatedFields(field);
       if (touched[field] || errors[field] || typeof value === "boolean") revalidate(next, related);
     };
 
@@ -124,7 +155,7 @@ export function ApplicationForm({ t, agentTypeLabels, countries, currencies, loc
     // Don't flag empty required fields just because focus passed through them.
     const raw = values[field];
     if (typeof raw === "string" && raw.trim() === "" && !errors[field]) return;
-    revalidate(values, [field]);
+    revalidate(values, relatedFields(field));
   };
 
   const focusField = (field: ApplicationField) => {
@@ -266,9 +297,87 @@ export function ApplicationForm({ t, agentTypeLabels, countries, currencies, loc
         return fmt(t.fields.ageConfirmed.label, { age: minimumAge });
       case "privacyConsent":
         return `${t.fields.privacyConsent.before} ${t.fields.privacyConsent.link}`;
+      case "phoneCountry":
+        return `${t.fields.phone.label} (${t.fields.phone.codeLabel})`;
+      case "whatsappCountry":
+        return `${t.fields.whatsapp.label} (${t.fields.phone.codeLabel})`;
       default:
         return t.fields[field].label;
     }
+  };
+
+  const phoneField = (pair: PhonePair, labels: { label: string; hint: string }, required: boolean) => {
+    const selected = callingCodes.find((c) => c.code === values[pair.code]);
+    const placeholder = selected
+      ? selected.example
+        ? fmt(t.fields.phone.examplePlaceholder, { example: selected.example })
+        : t.fields.phone.numberPlaceholder
+      : t.fields.phone.numberPlaceholder;
+    const hintId = id(`${pair.number}-hint`);
+    return (
+      <div className="field span-2" role="group" aria-labelledby={id(`${pair.number}-label`)}>
+        <div className="field__label" id={id(`${pair.number}-label`)}>
+          <span>{labels.label}</span>
+          <span className={`field__tag${required ? " field__tag--req" : ""}`}>
+            {required ? t.required : t.optional}
+          </span>
+        </div>
+        <div className="phone-group">
+          <div>
+            <label htmlFor={id(pair.code)} className="sr-only">
+              {`${labels.label}: ${t.fields.phone.codeLabel}`}
+            </label>
+            <select
+              id={id(pair.code)}
+              name={pair.code}
+              className="select"
+              autoComplete={required ? "tel-country-code" : "off"}
+              aria-required={required || undefined}
+              aria-invalid={Boolean(errors[pair.code])}
+              aria-describedby={errors[pair.code] ? id(`${pair.code}-error`) : undefined}
+              value={values[pair.code]}
+              onChange={update(pair.code)}
+              onBlur={blur(pair.code)}
+            >
+              <option value="">{t.fields.phone.codePlaceholder}</option>
+              {callingCodes.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {`${c.name} (+${c.dial})`}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor={id(pair.number)} className="sr-only">
+              {labels.label}
+            </label>
+            <input
+              id={id(pair.number)}
+              name={pair.number}
+              className="input"
+              type="tel"
+              inputMode="tel"
+              autoComplete={required ? "tel-national" : "off"}
+              placeholder={placeholder}
+              maxLength={24}
+              aria-required={required || undefined}
+              aria-invalid={Boolean(errors[pair.number])}
+              aria-describedby={[hintId, errors[pair.number] ? id(`${pair.number}-error`) : ""]
+                .filter(Boolean)
+                .join(" ")}
+              value={values[pair.number]}
+              onChange={update(pair.number)}
+              onBlur={blur(pair.number)}
+            />
+          </div>
+        </div>
+        <p id={hintId} className="field__hint">
+          {selected ? fmt(t.fields.phone.selectedHint, { country: selected.name, dial: selected.dial }) : labels.hint}
+        </p>
+        {errorText(pair.code)}
+        {errorText(pair.number)}
+      </div>
+    );
   };
 
   return (
@@ -399,32 +508,9 @@ export function ApplicationForm({ t, agentTypeLabels, countries, currencies, loc
       <fieldset className="form-section">
         <legend className="form-section__title">{t.sections.contact}</legend>
         <div className="form-grid">
-          <div className="field">
-            {fieldLabel("phone", t.fields.phone.label, true)}
-            <input
-              id={id("phone")}
-              name="phone"
-              className="input"
-              type="tel"
-              inputMode="tel"
-              autoComplete="tel"
-              placeholder={t.fields.phone.placeholder}
-              maxLength={24}
-              required
-              aria-required="true"
-              aria-invalid={Boolean(errors.phone)}
-              aria-describedby={describedBy("phone", true)}
-              value={values.phone}
-              onChange={update("phone")}
-              onBlur={blur("phone")}
-            />
-            <p id={id("phone-hint")} className="field__hint">
-              {t.fields.phone.hint}
-            </p>
-            {errorText("phone")}
-          </div>
+          {phoneField(PHONE, t.fields.phone, true)}
 
-          <div className="field">
+          <div className="field span-2">
             {fieldLabel("telegram", t.fields.telegram.label, true)}
             <input
               id={id("telegram")}
@@ -451,28 +537,7 @@ export function ApplicationForm({ t, agentTypeLabels, countries, currencies, loc
             {errorText("telegram")}
           </div>
 
-          <div className="field span-2">
-            {fieldLabel("whatsapp", t.fields.whatsapp.label)}
-            <input
-              id={id("whatsapp")}
-              name="whatsapp"
-              className="input"
-              type="tel"
-              inputMode="tel"
-              autoComplete="off"
-              placeholder={t.fields.whatsapp.placeholder}
-              maxLength={24}
-              aria-invalid={Boolean(errors.whatsapp)}
-              aria-describedby={describedBy("whatsapp", true)}
-              value={values.whatsapp}
-              onChange={update("whatsapp")}
-              onBlur={blur("whatsapp")}
-            />
-            <p id={id("whatsapp-hint")} className="field__hint">
-              {t.fields.whatsapp.hint}
-            </p>
-            {errorText("whatsapp")}
-          </div>
+          {phoneField(WHATSAPP, t.fields.whatsapp, false)}
         </div>
       </fieldset>
 

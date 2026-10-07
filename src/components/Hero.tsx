@@ -12,6 +12,7 @@ export function Hero({ t }: { t: Dictionary["hero"] }) {
         <div className="hero__copy">
           <p className="eyebrow">{t.eyebrow}</p>
           <DisplayTitle as="h1" id="hero-title" className="hero__title" lines={t.titleLines} accent={t.titleAccent} />
+          <p className="hero__tagline display">{t.tagline}</p>
           <p className="hero__lead">{t.lead}</p>
           <div className="hero__actions">
             <a href="#apply" className="btn btn--primary btn--lg">

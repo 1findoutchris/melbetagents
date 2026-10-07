@@ -1,4 +1,5 @@
-import type { Dictionary } from "@/i18n";
+import { siteConfig } from "@/config/site";
+import { fmt, type Dictionary } from "@/i18n";
 import { DisplayTitle } from "./Brand";
 import { IconArrowRight } from "./Icons";
 
@@ -23,7 +24,7 @@ export function About({ t }: { t: Dictionary["about"] }) {
               </span>
               <div>
                 <h3 className="about__title">{column.title}</h3>
-                <p className="about__body">{column.body}</p>
+                <p className="about__body">{fmt(column.body, { age: siteConfig.responsibleGambling.minimumAge })}</p>
               </div>
             </li>
           ))}

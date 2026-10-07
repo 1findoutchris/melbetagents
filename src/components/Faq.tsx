@@ -46,7 +46,17 @@ export function Faq({ t, age }: { t: Dictionary["faq"]; age: number }) {
                   inert={!open}
                 >
                   <div>
-                    <p>{fmt(item.a, { age })}</p>
+                    <p>
+                      {fmt(item.a, { age })}
+                      {item.link && (
+                        <>
+                          {" "}
+                          <a className="faq__link" href={item.link.href}>
+                            {item.link.label}
+                          </a>
+                        </>
+                      )}
+                    </p>
                   </div>
                 </div>
               </div>

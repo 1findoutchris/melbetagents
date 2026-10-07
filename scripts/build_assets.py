@@ -65,6 +65,23 @@ m = mark.resize((132, 132), Image.LANCZOS)
 apple.alpha_composite(m, (24, 24))
 apple.convert("RGB").save(APP / "apple-icon.png", optimize=True)
 
+# --- Partner logos (monochrome sources -> reversed white for the dark site) ----
+(PUBLIC / "partners").mkdir(parents=True, exist_ok=True)
+juv = (ASSETS / "partners" / "juventus-source.svg").read_text()
+# Same artwork and viewBox; only the single fill colour is reversed to white.
+juv = juv.replace("<path ", '<path fill="#ffffff" ', 1)
+(PUBLIC / "partners" / "juventus.svg").write_text(juv)
+lal = np.asarray(Image.open(ASSETS / "partners" / "laliga-source.jpg").convert("L")).astype(float)
+# Dark ink becomes opaque white; the white background becomes transparent.
+ink = np.clip((255 - lal - 8) / (247 - 8), 0, 1)
+lal_img = Image.fromarray(np.dstack([np.full(lal.shape, 255.0)] * 3 + [ink * 255]).round().astype(np.uint8), "RGBA")
+lal_img = lal_img.crop(lal_img.getbbox())  # trims empty margin only
+lal_h = 216
+lal_img = lal_img.resize((round(lal_img.width * lal_h / lal_img.height), lal_h), Image.LANCZOS)
+lal_img.save(PUBLIC / "partners" / "laliga.png", optimize=True)
+lal_img.save(PUBLIC / "partners" / "laliga.webp", quality=90, method=6)
+print("laliga", lal_img.size)
+
 # --- Footballs --------------------------------------------------------------------
 tmp = Path(tempfile.mkdtemp())
 run(ROOT / "scripts" / "render_football.py", tmp / "hero.png", 1100, 7)
@@ -99,8 +116,9 @@ lg = logo.resize((round(logo.width * 44 / logo.height), 44), Image.LANCZOS)
 og.alpha_composite(lg, (72, 72))
 font = ImageFont.truetype(str(ASSETS / "fonts" / "BarlowCondensed-ExtraBold.ttf"), 96)
 d = ImageDraw.Draw(og)
-d.text((70, 200), "BECOME AN AGENT.", font=font, fill=(255, 255, 255))
-d.text((70, 300), "BUILD YOUR", font=font, fill=(255, 255, 255))
-d.text((70, 400), "PAYMENT BUSINESS.", font=font, fill=(255, 212, 0))
+d.text((70, 210), "BECOME A MELBET", font=font, fill=(255, 255, 255))
+d.text((70, 310), "PAYMENT AGENT.", font=font, fill=(255, 212, 0))
+small = ImageFont.truetype(str(ASSETS / "fonts" / "BarlowCondensed-ExtraBold.ttf"), 40)
+d.text((72, 440), "APPLY AT MELBETAGENTS.ORG", font=small, fill=(184, 187, 194))
 og.convert("RGB").save(APP / "opengraph-image.png", optimize=True)
 print("assets built")

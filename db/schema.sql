@@ -30,6 +30,10 @@ CREATE TABLE IF NOT EXISTS agent_applications (
   notified_at       timestamptz                    -- set when the Telegram notification succeeds
 );
 
+-- Added for international phone fields (ISO country whose calling code was selected).
+ALTER TABLE agent_applications ADD COLUMN IF NOT EXISTS phone_country char(2);
+ALTER TABLE agent_applications ADD COLUMN IF NOT EXISTS whatsapp_country char(2);
+
 CREATE INDEX IF NOT EXISTS agent_applications_created_at_idx ON agent_applications (created_at DESC);
 CREATE INDEX IF NOT EXISTS agent_applications_ip_hash_idx ON agent_applications (ip_hash, created_at DESC);
 CREATE INDEX IF NOT EXISTS agent_applications_phone_idx ON agent_applications (phone, created_at DESC);

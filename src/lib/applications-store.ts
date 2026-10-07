@@ -52,8 +52,8 @@ export async function saveApplication(input: {
     `INSERT INTO agent_applications
        (submission_id, full_name, country, city, phone, telegram, whatsapp, agent_type,
         capital_amount, capital_currency, experience, message,
-        age_confirmed, privacy_consent, locale, ip_hash, user_agent)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,true,true,$13,$14,$15)
+        age_confirmed, privacy_consent, locale, ip_hash, user_agent, phone_country, whatsapp_country)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,true,true,$13,$14,$15,$16,$17)
      ON CONFLICT (submission_id) DO NOTHING
      RETURNING id`,
     [
@@ -72,6 +72,8 @@ export async function saveApplication(input: {
       input.locale,
       input.ipHash,
       input.userAgent?.slice(0, 400) ?? null,
+      a.phoneCountry,
+      a.whatsappCountry,
     ],
   );
 
