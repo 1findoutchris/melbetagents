@@ -1,11 +1,11 @@
 import { createHash } from "node:crypto";
 import { after, NextResponse, type NextRequest } from "next/server";
 import { validateApplication, type SubmissionResponse } from "@/lib/application";
-import { markNotified, saveApplication } from "@/lib/applications-store";
+import { saveApplication } from "@/lib/applications-store";
+import { deliverNotification, processDueNotifications } from "@/lib/notifications";
 import { isDatabaseConfigured } from "@/lib/db";
 import { consumeLocal, rateLimitSettings } from "@/lib/rate-limit";
 import { serverPhoneLib } from "@/lib/phone-server";
-import { notifyNewApplication } from "@/lib/telegram";
 import { isLocale } from "@/i18n";
 
 export const runtime = "nodejs";
@@ -106,11 +106,17 @@ export async function POST(request: NextRequest) {
       case "retry":
         return reply({ ok: true, reference: stored.reference }, 200);
       case "created":
-        // Notify staff after the response is sent; a failed notification never affects the applicant.
+        // Notify the staff Telegram group after the response is sent. The application is
+        // already saved, so a Telegram problem never changes what the applicant sees.
         after(async () => {
-          if (await notifyNewApplication(result.value, stored.reference)) {
-            await markNotified(stored.id).catch((error: unknown) =>
-              console.error("[applications] could not mark notified:", error),
+          try {
+            await deliverNotification(stored.id);
+            // Also retry any earlier notifications that are due (e.g. after a rate limit).
+            await processDueNotifications(5);
+          } catch (error) {
+            console.error(
+              "[telegram] notification processing error:",
+              error instanceof Error ? error.message : "unknown",
             );
           }
         });

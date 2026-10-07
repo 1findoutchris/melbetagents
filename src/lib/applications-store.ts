@@ -1,6 +1,7 @@
 import "server-only";
 import { getPool } from "@/lib/db";
 import type { CleanApplication } from "@/lib/application";
+import { initialNotifyStatus } from "@/lib/notifications";
 
 export type StoreResult =
   | { kind: "created"; id: string; reference: string }
@@ -8,8 +9,9 @@ export type StoreResult =
   | { kind: "duplicate"; reference: string } // same phone/Telegram applied recently
   | { kind: "rateLimited" };
 
-/** Human-friendly reference derived from the row id, e.g. "MA-1A2B3C4D". */
-export const referenceFor = (id: string) => `MA-${id.replace(/-/g, "").slice(0, 8).toUpperCase()}`;
+import { referenceFor } from "@/lib/reference";
+
+export { referenceFor };
 
 const DUPLICATE_WINDOW_HOURS = 24;
 
@@ -52,8 +54,9 @@ export async function saveApplication(input: {
     `INSERT INTO agent_applications
        (submission_id, full_name, country, city, phone, telegram, whatsapp, agent_type,
         capital_amount, capital_currency, experience, message,
-        age_confirmed, privacy_consent, locale, ip_hash, user_agent, phone_country, whatsapp_country)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,true,true,$13,$14,$15,$16,$17)
+        age_confirmed, privacy_consent, locale, ip_hash, user_agent, phone_country, whatsapp_country,
+        notify_status)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,true,true,$13,$14,$15,$16,$17,$18)
      ON CONFLICT (submission_id) DO NOTHING
      RETURNING id`,
     [
@@ -74,6 +77,7 @@ export async function saveApplication(input: {
       input.userAgent?.slice(0, 400) ?? null,
       a.phoneCountry,
       a.whatsappCountry,
+      initialNotifyStatus(),
     ],
   );
 
@@ -88,8 +92,4 @@ export async function saveApplication(input: {
   ]);
   if (!raced.rows[0]) throw new Error("Insert returned no row and no existing submission was found");
   return { kind: "retry", reference: referenceFor(raced.rows[0].id) };
-}
-
-export async function markNotified(id: string): Promise<void> {
-  await getPool().query("UPDATE agent_applications SET notified_at = now() WHERE id = $1", [id]);
 }

@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: termsEn.title,
-  description: fmt(termsEn.description, { site: siteConfig.domain }),
+  description: fmt(termsEn.description, { site: siteConfig.displayName }),
   path: "/terms",
 });
 

@@ -12,7 +12,9 @@
     "db:migrate": "node scripts/migrate.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "assets": "python3 scripts/build_assets.py"
+    "assets": "python3 scripts/build_assets.py",
+    "telegram:setup": "node scripts/telegram-setup.mjs",
+    "telegram:test": "node scripts/telegram-setup.mjs --test"
   },
   "engines": {
     "node": ">=20.9"

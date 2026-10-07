@@ -7,7 +7,7 @@ export const en = {
   meta: {
     title: "Become a Melbet Agent | Apply at Melbet Agents",
     description:
-      "Interested in becoming a Melbet payment agent? Learn about agent requirements, deposits and withdrawals, and submit your application at melbetagents.org.",
+      "Interested in becoming a Melbet payment agent? Learn about agent requirements, deposits and withdrawals, and submit your application to Melbet.",
     ogAlt: "Become a Melbet payment agent. Build your payment business.",
   },
   a11y: {
