@@ -1,5 +1,6 @@
 import { siteConfig } from "@/config/site";
 import { getDictionary, type Locale } from "@/i18n";
+import { About } from "./About";
 import { AgentTypes } from "./AgentTypes";
 import { ApplicationSection } from "./ApplicationSection";
 import { Benefits } from "./Benefits";
@@ -23,6 +24,7 @@ export function HomePage({ locale }: { locale: Locale }) {
       <Header nav={t.nav} a11y={t.a11y} />
       <main id="main" tabIndex={-1}>
         <Hero t={t.hero} dashboard={t.dashboard} />
+        <About t={t.about} />
         <Benefits t={t.benefits} />
         <AgentTypes t={t.agentTypes} applyLabel={t.hero.primaryCta} />
         <HowItWorks t={t.howItWorks} />

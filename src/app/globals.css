@@ -519,7 +519,7 @@ textarea {
   }
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1080px) {
   .nav,
   .header-apply--full {
     display: none;
@@ -529,7 +529,7 @@ textarea {
   }
 }
 
-@media (min-width: 961px) {
+@media (min-width: 1081px) {
   .header-apply--short,
   .mobile-menu {
     display: none !important;
@@ -554,6 +554,24 @@ textarea {
   }
   .header-apply--short {
     padding: 0 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .wordmark {
+    font-size: 1rem;
+  }
+  .wordmark__accent {
+    letter-spacing: 0.12em;
+  }
+  .header-apply--short {
+    --btn-h: 40px;
+    padding: 0 13px;
+    font-size: 0.875rem;
+  }
+  .menu-toggle {
+    width: 40px;
+    height: 40px;
   }
 }
 
@@ -612,7 +630,7 @@ textarea {
 }
 
 .hero__title {
-  font-size: clamp(2.6rem, 6.4vw, 4.6rem);
+  font-size: clamp(2.3rem, 5.2vw, 4rem);
   line-height: 1.02;
   letter-spacing: -0.035em;
 }
@@ -2109,4 +2127,68 @@ fieldset.form-section legend + * {
 .not-found p {
   margin: 14px 0 28px;
   color: var(--muted);
+}
+
+/* --------------------------------------------------------------------------
+   About
+   -------------------------------------------------------------------------- */
+
+.about {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+
+.about__cta {
+  margin-top: 32px;
+}
+
+.about__list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--border);
+}
+
+.about__item {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 20px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.about__num {
+  color: var(--yellow);
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.about__title {
+  font-size: 1.25rem;
+}
+
+.about__body {
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+@media (max-width: 960px) {
+  .about {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .about__item {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 14px;
+  }
+  .about__num {
+    font-size: 1.5rem;
+  }
 }

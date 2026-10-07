@@ -2,7 +2,7 @@ import type { Dictionary } from "@/i18n";
 import { IconArrowDown, IconArrowUp, IconInfo } from "./Icons";
 
 /**
- * Decorative dashboard mock-up. All figures are hard-coded samples and are
+ * Decorative transaction-overview mock-up (not a real product feature). All figures are hard-coded samples and are
  * labelled "Illustrative example" — they are not real balances or earnings.
  */
 const SAMPLE = {

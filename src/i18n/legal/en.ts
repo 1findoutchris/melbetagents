@@ -105,7 +105,7 @@ export const termsEn: LegalDoc = {
     {
       h: "No guaranteed earnings",
       p: [
-        "Nothing on this website is a promise of income. Any figures shown, including in the dashboard illustration, are illustrative examples only. Your results depend on the terms you agree, your location and your own work.",
+        "Nothing on this website is a promise of income. Any figures shown, including in the illustration at the top of the home page, are illustrative examples only. Your results depend on the terms you agree, your location and your own work.",
       ],
     },
     {

@@ -19,9 +19,10 @@ export function Header({ nav, a11y, base = "" }: Props) {
   const menuRef = useRef<HTMLDivElement>(null);
 
   const links = [
+    { href: `${base}#about`, label: nav.about },
     { href: `${base}#benefits`, label: nav.benefits },
-    { href: `${base}#how-it-works`, label: nav.howItWorks },
     { href: `${base}#agent-types`, label: nav.agentTypes },
+    { href: `${base}#how-it-works`, label: nav.howItWorks },
     { href: `${base}#faq`, label: nav.faq },
   ];
   const applyHref = `${base}#apply`;
@@ -65,7 +66,7 @@ export function Header({ nav, a11y, base = "" }: Props) {
       }
     };
     const onResize = () => {
-      if (window.matchMedia("(min-width: 961px)").matches) close(false);
+      if (window.matchMedia("(min-width: 1081px)").matches) close(false);
     };
     document.addEventListener("keydown", onKey);
     window.addEventListener("resize", onResize);
