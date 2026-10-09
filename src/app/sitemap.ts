@@ -1,20 +1,15 @@
 import type { MetadataRoute } from "next";
-import { siteConfig, siteUrl } from "@/config/site";
-import { compareGuideEn } from "@/i18n/guides/en";
+import { siteUrl } from "@/config/site";
+import searchPages from "@/config/search-pages.json";
 
 /** Public, indexable pages only. */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = siteUrl();
-  const legal = new Date(siteConfig.legal.lastUpdated);
-  return [
-    { url: `${base}/`, lastModified: new Date(siteConfig.contentUpdated), changeFrequency: "monthly", priority: 1 },
-    {
-      url: `${base}${compareGuideEn.path}`,
-      lastModified: new Date(compareGuideEn.updated),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    { url: `${base}/privacy`, lastModified: legal, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${base}/terms`, lastModified: legal, changeFrequency: "yearly", priority: 0.3 },
-  ];
+  if (process.env.SITE_NOINDEX === "true") return [];
+  return searchPages
+    .filter((page) => page.indexable)
+    .map((page) => ({
+      url: `${siteUrl()}${page.path === "/" ? "" : page.path}`,
+      // Content/metadata review date, never the build time. Omit if unknown.
+      ...(page.modified ? { lastModified: new Date(page.modified) } : {}),
+    }));
 }
