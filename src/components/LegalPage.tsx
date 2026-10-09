@@ -4,8 +4,9 @@ import type { LegalDoc } from "@/i18n/legal/en";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 import { IconArrowLeft } from "./Icons";
+import { breadcrumbJsonLd, JsonLd } from "@/lib/seo";
 
-export function LegalPage({ doc, locale }: { doc: LegalDoc; locale: Locale }) {
+export function LegalPage({ doc, locale, path }: { doc: LegalDoc; locale: Locale; path: string }) {
   const t = getDictionary(locale);
   const { email, telegram } = siteConfig.contact;
   const contact = email
@@ -38,10 +39,12 @@ export function LegalPage({ doc, locale }: { doc: LegalDoc; locale: Locale }) {
       <Header nav={t.nav} a11y={t.a11y} base="/" />
       <main id="main" tabIndex={-1} className="container">
         <article className="legal">
-          <a href="/" className="back-link">
-            <IconArrowLeft size={18} />
-            {t.legal.backHome}
-          </a>
+          <nav aria-label="Breadcrumb">
+            <a href="/" className="back-link">
+              <IconArrowLeft size={18} />
+              {t.legal.backHome}
+            </a>
+          </nav>
           <h1>{doc.title}</h1>
           <p className="legal__meta">
             {t.legal.lastUpdated}: <time dateTime={siteConfig.legal.lastUpdated}>{date}</time>
@@ -65,6 +68,7 @@ export function LegalPage({ doc, locale }: { doc: LegalDoc; locale: Locale }) {
         </article>
       </main>
       <Footer t={t.footer} nav={t.nav} a11y={t.a11y} />
+      <JsonLd data={breadcrumbJsonLd(path, doc.title)} />
     </>
   );
 }
