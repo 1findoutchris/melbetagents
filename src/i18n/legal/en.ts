@@ -8,7 +8,8 @@ export type LegalDoc = { title: string; description: string; intro: string; sect
 
 export const privacyEn: LegalDoc = {
   title: "Privacy Policy",
-  description: "How applications submitted to {site} through this website are collected, used and protected.",
+  description:
+    "Read how this website collects and uses {site} agent application details, including access, security, retention, consent and your privacy choices.",
   intro:
     "This policy explains what information {operator} collects when you apply through this website, why it is collected and the choices you have.",
   sections: [
@@ -84,7 +85,8 @@ export const privacyEn: LegalDoc = {
 
 export const termsEn: LegalDoc = {
   title: "Terms of Use",
-  description: "Terms that apply when you use this website and submit a {site} agent application.",
+  description:
+    "Read the terms for using this {site} agent application website, including eligibility, application review, local laws, trademarks and responsibilities.",
   intro: "By using this website you agree to these terms. If you do not agree, please do not use the website.",
   sections: [
     {

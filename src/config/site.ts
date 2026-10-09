@@ -139,5 +139,9 @@ export function visibleAgentTypes(): AgentTypeId[] {
 }
 
 export function siteUrl(): string {
-  return (process.env.SITE_URL || siteConfig.url).replace(/\/$/, "");
+  const url = new URL(process.env.SITE_URL || siteConfig.url);
+  if (url.protocol !== "https:" || url.username || url.password || url.search || url.hash || url.pathname !== "/") {
+    throw new Error("SITE_URL must be a public HTTPS origin without credentials, path, query or fragment.");
+  }
+  return url.origin;
 }

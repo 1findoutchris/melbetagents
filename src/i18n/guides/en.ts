@@ -6,9 +6,9 @@
 export const compareGuideEn = {
   path: "/guides/melbet-1xbet-payment-agents",
   updated: "2026-10-07",
-  metaTitle: "Melbet and 1xBet Payment Agent Opportunities: What to Compare",
+  metaTitle: "Melbet vs 1xBet Payment Agents: What to Compare",
   description:
-    "A neutral guide to betting payment agent opportunities: how payment agents differ from referral affiliates, and what to ask about requirements, commission, funding and support.",
+    "Compare payment agent and affiliate roles, and learn what to ask about requirements, commission terms, operating balance and support before applying.",
   eyebrow: "Guide",
   title: "Melbet and 1xBet Payment Agent Opportunities: What to Compare",
   breadcrumbHome: "Home",

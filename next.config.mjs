@@ -7,12 +7,25 @@ const securityHeaders = [
 ];
 
 /** Canonical origin. Other hosts listed in ALTERNATE_HOSTS redirect here permanently. */
-const canonical = (process.env.SITE_URL || "https://melbetagents.org").replace(/\/$/, "");
+const canonicalUrl = new URL(process.env.SITE_URL || "https://melbetagents.org");
+if (
+  canonicalUrl.protocol !== "https:" ||
+  canonicalUrl.username ||
+  canonicalUrl.password ||
+  canonicalUrl.pathname !== "/" ||
+  canonicalUrl.search ||
+  canonicalUrl.hash
+) {
+  throw new Error("SITE_URL must be a public HTTPS origin.");
+}
+const canonical = canonicalUrl.origin;
 const canonicalHost = new URL(canonical).host;
 const alternateHosts = (process.env.ALTERNATE_HOSTS || `www.${canonicalHost}`)
   .split(",")
   .map((h) => h.trim())
   .filter(Boolean);
+if (alternateHosts.includes(canonicalHost))
+  throw new Error("ALTERNATE_HOSTS must not contain the canonical host (redirect loop).");
 
 const nextConfig = {
   reactStrictMode: true,
@@ -22,6 +35,11 @@ const nextConfig = {
       { source: "/:path*", headers: securityHeaders },
       // Keep the submission endpoint out of search results.
       { source: "/api/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      ...["images", "brand", "partners"].map((directory) => ({
+        source: `/${directory}/:path*`,
+        // These filenames can be replaced, so do not cache them as immutable.
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
+      })),
     ];
   },
   async redirects() {

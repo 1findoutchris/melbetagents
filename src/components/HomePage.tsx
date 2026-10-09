@@ -1,6 +1,6 @@
 import { siteConfig } from "@/config/site";
 import { fmt, getDictionary, type Locale } from "@/i18n";
-import { JsonLd, siteJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/lib/seo";
 import { About } from "./About";
 import { AgentTypes } from "./AgentTypes";
 import { ApplicationSection } from "./ApplicationSection";
@@ -54,7 +54,6 @@ export function HomePage({ locale }: { locale: Locale }) {
       <Footer t={t.footer} nav={t.nav} a11y={t.a11y} />
       <StickyApply label={t.stickyCta} />
       <Reveal />
-      <JsonLd data={siteJsonLd(locale)} />
       <JsonLd data={faqJsonLd} />
     </>
   );

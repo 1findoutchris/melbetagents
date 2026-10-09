@@ -11,5 +11,5 @@ export const metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <LegalPage doc={privacyEn} locale="en" />;
+  return <LegalPage doc={privacyEn} locale="en" path="/privacy" />;
 }
