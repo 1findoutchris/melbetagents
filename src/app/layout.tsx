@@ -3,6 +3,7 @@ import { Barlow_Condensed, Inter } from "next/font/google";
 import { siteConfig, siteUrl } from "@/config/site";
 import { defaultLocale, getDictionary, localeMeta } from "@/i18n";
 import "./globals.css";
+import { JsonLd, siteJsonLd } from "@/lib/seo";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const barlow = Barlow_Condensed({
@@ -56,7 +57,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Enables JS-only enhancements (scroll reveal) without hiding content when JS is unavailable. */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <JsonLd data={siteJsonLd(defaultLocale)} />
+      </body>
     </html>
   );
 }
