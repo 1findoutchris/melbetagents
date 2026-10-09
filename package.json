@@ -5,7 +5,9 @@
   "description": "Payment agent recruitment website for melbetagents.org",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/check-search-routes.mjs && next build",
+    "seo:routes": "node scripts/check-search-routes.mjs",
+    "seo:check": "python3 scripts/check_seo.py",
     "start": "next start",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
