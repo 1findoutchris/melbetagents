@@ -3,7 +3,7 @@
 A recruitment website for payment agents. It explains the role, the onboarding steps and the agent types, and it collects applications into PostgreSQL. Staff can optionally get a Telegram notification for each new application.
 
 - **Stack:** Next.js 16 (App Router, TypeScript), React 19, PostgreSQL via `pg`. The app uses no UI framework, so the page ships very little JavaScript.
-- **Pages:** `/` (landing page and application form), `/privacy`, `/terms`, plus `robots.txt`, `sitemap.xml`, a favicon, an Apple touch icon and an Open Graph image.
+- **Pages:** `/` (landing page and application form), `/privacy`, `/terms`, `/guides/melbet-1xbet-payment-agents`, plus `robots.txt`, `sitemap.xml`, a favicon, an Apple touch icon and an Open Graph image.
 - **API:** `POST /api/applications` validates and stores an application on the server.
 
 ---
@@ -177,7 +177,7 @@ What is in place:
   - `WebSite` structured data is published, along with `FAQPage` data that mirrors the visible FAQ.
   - `Organization` data is published only after you set `siteConfig.operator.confirmed: true` with the real operator name.
   - The guide page publishes `Article` and `BreadcrumbList` data.
-- **Crawling:** `sitemap.xml` lists the home page, the guide and the legal pages. `robots.txt` allows everything except `/api/`, and `/api/*` responses also send `X-Robots-Tag: noindex`. Applicant data is never rendered on any page.
+- **Crawling:** `sitemap.xml` lists the home page, the guide and the legal pages. `robots.txt` permits crawling public pages and noindex responses, and `/api/*` responses send `X-Robots-Tag: noindex`. Applicant data is never rendered on any page.
 - **Redirects:** `www.` (or the hosts in `ALTERNATE_HOSTS`) redirects to the canonical domain. Requests that arrive as `http` behind a proxy redirect to `https`. Most hosts, including Vercel, also enforce HTTPS themselves.
 - **Guide page:** `/guides/melbet-1xbet-payment-agents` is a neutral guide for people comparing payment agent opportunities. It states that this site recruits Melbet agents only and makes no claims about 1xBet's terms.
 
@@ -244,3 +244,36 @@ Every item below is marked `REVIEW BEFORE LAUNCH` in the code. Nothing on the si
 11. **Responsible-gambling resource:** this defaults to Gambling Therapy (international). Replace it with a local service if appropriate.
 12. **Logos:** confirm you are permitted to display the Juventus, LaLiga, Los Angeles Knight Riders and flame mascot logos. Give the flame mascot its proper name in `siteConfig.partners` so its alt text is accurate.
 13. **Operator confirmation:** set `siteConfig.operator.confirmed: true` once `legalName` is real, so `Organization` structured data is published.
+
+## SEO maintenance and validation
+
+See [SEO audit](docs/seo-audit.md) and [search operations](docs/search-operations.md).
+
+Every HTML route has an explicit indexing decision in `src/config/search-pages.json`.
+The sitemap is generated from that policy; adding/removing a reviewed page updates it
+automatically. The build fails when the route list and policy drift. Do not auto-include
+new routes without reviewing their privacy/indexing purpose. Private pages must also
+use `pageMetadata` (or explicit noindex metadata) and enforce server authentication.
+Update `modified` only for a real content/metadata change; omit it when unknown.
+For dynamic routes, extend URL enumeration and validation before using them.
+
+```bash
+npm ci
+npm run build          # includes route coverage guard
+npm run typecheck
+npm run lint           # currently the same TypeScript check, not ESLint
+npm run format:check
+npm start
+# In another terminal (Python 3; no pip packages required):
+npm run seo:check -- --base http://localhost:3000
+npm run seo:check -- --base https://melbetagents.org
+```
+
+Preview builds use `SITE_NOINDEX=true`; run the checker with `--noindex`.
+They remain crawlable so Google can read noindex, and their sitemap is empty.
+A Railway environment named `production` refuses to build with that flag enabled.
+`SITE_URL` must be an HTTPS origin without a path, query, fragment or credentials.
+An alias cannot equal the canonical host (this would create a redirect loop).
+Fixed-name images/brand/partner files cache for one day and may serve stale content
+while revalidating for seven days. For an immediate asset replacement, change its
+filename and referencing source; Next's hashed assets already have immutable caching.
