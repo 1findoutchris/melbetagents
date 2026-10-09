@@ -24,7 +24,6 @@ export function GuidePage({ g, locale }: { g: CompareGuide; locale: Locale }) {
         headline: g.title,
         description: g.description,
         dateModified: g.updated,
-        datePublished: g.updated,
         inLanguage: locale,
         mainEntityOfPage: url,
         isPartOf: { "@id": `${siteUrl()}/#website` },
