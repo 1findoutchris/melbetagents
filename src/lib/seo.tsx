@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { siteConfig, siteUrl } from "@/config/site";
 import { getDictionary, localeMeta, type Locale } from "@/i18n";
+import searchPages from "@/config/search-pages.json";
 
 /** Unique title, description, canonical and social tags for one page. */
 export function pageMetadata({
@@ -19,14 +20,18 @@ export function pageMetadata({
   type?: "website" | "article";
 }): Metadata {
   const fullTitle = absoluteTitle ? title : `${title} | ${siteConfig.name}`;
+  const page = searchPages.find((page) => page.path === path);
+  if (!page) throw new Error(`Missing search route policy for ${path}`);
+  const url = `${siteUrl()}${path === "/" ? "" : path}`;
   const image = { url: "/opengraph-image.png", width: 1200, height: 630, alt: getDictionary(locale).meta.ogAlt };
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
-    alternates: { canonical: path },
+    alternates: { canonical: url },
+    ...(!page.indexable ? { robots: { index: false, follow: false } } : {}),
     openGraph: {
       type,
-      url: path,
+      url,
       siteName: siteConfig.name,
       title: fullTitle,
       description,
@@ -34,6 +39,17 @@ export function pageMetadata({
       images: [image],
     },
     twitter: { card: "summary_large_image", title: fullTitle, description, images: [image] },
+  };
+}
+
+export function breadcrumbJsonLd(path: string, name: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${siteUrl()}/` },
+      { "@type": "ListItem", position: 2, name, item: `${siteUrl()}${path}` },
+    ],
   };
 }
 
