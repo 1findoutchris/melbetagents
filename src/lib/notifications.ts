@@ -1,7 +1,13 @@
 import "server-only";
 import { getPool } from "@/lib/db";
 import { referenceFor } from "@/lib/reference";
-import { formatApplicationMessage, isTelegramConfigured, sendGroupMessage, type NotificationRow } from "@/lib/telegram";
+import {
+  formatApplicationMessage,
+  isTelegramConfigured,
+  notificationTimeZone,
+  sendGroupMessage,
+  type NotificationRow,
+} from "@/lib/telegram";
 
 /**
  * Delivery of staff notifications for saved applications.
@@ -22,6 +28,26 @@ const INLINE_WAIT_LIMIT_S = 15;
 const STALE_CLAIM_MINUTES = 5;
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Running count for the notification: this application's position among all
+ * saved applications, and among those saved the same day (in TELEGRAM_TIMEZONE).
+ * Based on created_at, so a retried notification shows the same numbers.
+ */
+async function applicationCounts(id: string): Promise<{ total: number; today: number } | undefined> {
+  const { rows } = await getPool().query<{ total: string; today: string }>(
+    `SELECT
+        count(*) AS total,
+        count(*) FILTER (
+          WHERE (a.created_at AT TIME ZONE $2)::date = (me.created_at AT TIME ZONE $2)::date
+        ) AS today
+       FROM agent_applications a, agent_applications me
+      WHERE me.id = $1 AND a.created_at <= me.created_at`,
+    [id, notificationTimeZone()],
+  );
+  const row = rows[0];
+  return row ? { total: Number(row.total), today: Number(row.today) } : undefined;
+}
 
 /** Initial status for a new row. */
 export function initialNotifyStatus(): "pending" | "not_configured" {
@@ -81,7 +107,8 @@ export async function deliverNotification(id: string): Promise<"sent" | "schedul
   for (let inline = 0; inline < 2; inline++) {
     const row = await claim(id);
     if (!row) return "skipped";
-    const result = await sendGroupMessage(formatApplicationMessage(row));
+    const counts = await applicationCounts(row.id).catch(() => undefined);
+    const result = await sendGroupMessage(formatApplicationMessage({ ...row, counts }));
     if (result.ok) {
       await markSent(row.id, result.messageId);
       return "sent";

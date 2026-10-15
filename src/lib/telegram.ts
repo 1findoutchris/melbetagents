@@ -109,6 +109,8 @@ export type NotificationRow = {
   experience: string | null;
   message: string | null;
   created_at: Date;
+  /** Running number of this application (1 = first ever) and its number within its day. */
+  counts?: { total: number; today: number };
 };
 
 const AGENT_TYPE_LABELS: Record<string, string> = {
@@ -134,8 +136,19 @@ function countryName(code: string): string {
   }
 }
 
+/** Time zone for notification dates and "today" counts; falls back to UTC if invalid. */
+export function notificationTimeZone(): string {
+  const timeZone = process.env.TELEGRAM_TIMEZONE?.trim() || "UTC";
+  try {
+    new Intl.DateTimeFormat("en", { timeZone });
+    return timeZone;
+  } catch {
+    return "UTC";
+  }
+}
+
 function formatSubmitted(date: Date): string {
-  const timeZone = process.env.TELEGRAM_TIMEZONE || "UTC";
+  const timeZone = notificationTimeZone();
   try {
     return new Intl.DateTimeFormat("en-GB", {
       day: "numeric",
@@ -169,6 +182,7 @@ export function formatApplicationMessage(row: NotificationRow): string {
   return [
     "📩 NEW MELBET AGENT APPLICATION",
     "",
+    ...(row.counts ? [`Application #${row.counts.total} (${row.counts.today} today)`] : []),
     `Application ID: ${row.reference}`,
     `Full name: ${row.full_name}`,
     `Country: ${countryName(row.country)}`,
