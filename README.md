@@ -49,6 +49,7 @@ Each saved application is posted to your staff Telegram group by @melbetagentsor
 ```
 📩 NEW MELBET AGENT APPLICATION
 
+Application #27 (3 today)
 Application ID: MA-1A2B3C4D
 Full name: …
 Country: Kenya (KE)
@@ -64,6 +65,8 @@ Submitted: 7 Oct 2026, 14:24 GMT+3
 ```
 
 **How it works**
+
+- **Count:** "Application #27 (3 today)" is this application's position among all saved applications, and among those saved the same day in `TELEGRAM_TIMEZONE`. A retried notification keeps its original number.
 
 - **Sending:**
   - The message is sent only after the application is validated and saved, and after the applicant's response has already gone out. A Telegram problem never affects the applicant or the saved application.
